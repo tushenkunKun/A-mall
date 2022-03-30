@@ -3,6 +3,7 @@
     <Header />
     <Search />
     <Banner />
+    <Nav />
   </div>
   <Docker />
 </template>
@@ -12,9 +13,10 @@ import Docker from "./home/Docker.vue";
 import Header from "./home/Header.vue";
 import Search from "./home/Search.vue";
 import Banner from "./home/Banner.vue";
+import Nav from "./home/Nav.vue";
 export default {
   name: "Home",
-  components: { Docker,Header,Search,Banner },
+  components: { Docker,Header,Search,Banner,Nav },
   setup() {
     return {};
   },
