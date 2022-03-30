@@ -11,7 +11,7 @@
 </template>
 <script>
 export default {
-  name: "",
+  name: "Header",
   setup() {
     return {};
   },

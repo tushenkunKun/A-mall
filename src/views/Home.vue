@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <Header />
+    <Search />
   </div>
   <Docker />
 </template>
@@ -8,9 +9,10 @@
 <script>
 import Docker from "./home/Docker.vue";
 import Header from "./home/Header.vue";
+import Search from "./home/Search.vue";
 export default {
   name: "Home",
-  components: { Docker,Header },
+  components: { Docker,Header,Search },
   setup() {
     return {};
   },
