@@ -9,6 +9,12 @@ body {
   font-size: 12rem;
   color: #333;
 }
+input{
+  outline: none;
+}
+button{
+  border: none;
+}
 @font-face {
   font-family: "iconfont"; /* Project id 3201111 */
   src: url("//at.alicdn.com/t/font_3201111_tox4rs782z.woff2?t=1646278820812") format("woff2"),
