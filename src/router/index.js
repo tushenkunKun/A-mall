@@ -26,5 +26,11 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-
+router.beforeEach((to,from,next)=>{
+  if(localStorage.isLogin==="true"||to.name==="Login"){
+    next();
+  }else{
+    next({name:"Login"});
+  }
+})
 export default router;
