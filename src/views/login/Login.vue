@@ -8,20 +8,29 @@
       <input class="container__userinput__userpassword" type="password" placeholder="请输入密码" />
     </div>
     <div class="container__userhandle">
-      <button class="container__userhandle__login">登 录</button>
+      <button class="container__userhandle__login" @click="handleLogin">登 录</button>
     </div>
-    <div class="container__userskip">
-      <a href="javascript:;">立即注册</a>
+    <div class="container__userskipregister">
+      <a href="javascript:;" @click="go2register">立即注册</a>
       <span class="container__userskip__gap">|</span>
       <a href="javascript:;">忘记密码</a>
     </div>
   </div>
 </template>
 <script>
+import { useRouter } from 'vue-router';
 export default {
   name: "Login",
   setup() {
-    return {};
+    const router = useRouter();
+    const handleLogin=()=>{
+      localStorage.setItem("isLogin","true");
+      router.push({name:"Home"});
+    };
+    const go2register=()=>{
+      router.push({name:"Register"});
+    };
+    return {handleLogin,go2register};
   },
 };
 </script>
@@ -72,7 +81,7 @@ export default {
       line-height: 24rem;
     }
   }
-  &__userskip {
+  &__userskipregister {
     width: 139rem;
     height: 20rem;
     display: flex;
