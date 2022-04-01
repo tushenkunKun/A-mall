@@ -1,15 +1,15 @@
 <template>
-  <div class="toast">{{message}}</div>
+  <div class="toast">{{ message }}</div>
 </template>
 <script>
-import {reactive} from "vue";
+import { reactive, toRefs } from "vue";
 export default {
-  name:'Toast',
-  props:["message"],
-  setup(){
-    return{}
-  }
-}
+  name: "Toast",
+  props: ["message"],
+  setup() {
+    return {};
+  },
+};
 export const toastEffect = () => {
   const toastData = reactive({
     isShowToast: false,
@@ -23,18 +23,19 @@ export const toastEffect = () => {
       toastData.toastMessage = "";
     }, 2000);
   };
-  return { toastData, showToast };
+  const { isShowToast, toastMessage } = toRefs(toastData);
+  return { isShowToast, toastMessage, showToast };
 };
 </script>
-<style lang='scss' scoped>
-  .toast{
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    background:rgba(0,0,0,.35);
-    padding: 10rem;
-    border-radius: 5rem;
-    color: #fff;
-  }
+<style lang="scss" scoped>
+.toast {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 10rem;
+  border-radius: 5rem;
+  color: #fff;
+}
 </style>

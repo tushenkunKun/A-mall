@@ -4,8 +4,8 @@
       <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202221429453.png" alt="头像" />
     </div>
     <div class="container__userinput">
-      <input class="container__userinput__userphone" type="text" placeholder="请输入手机号" v-model="loginData.phone" />
-      <input class="container__userinput__userpassword" type="password" placeholder="请输入密码" v-model="loginData.password" />
+      <input class="container__userinput__userphone" type="text" placeholder="请输入手机号" v-model="phone" />
+      <input class="container__userinput__userpassword" type="password" placeholder="请输入密码" v-model="password" />
     </div>
     <div class="container__userhandle">
       <button class="container__userhandle__login" @click="handleLogin">登 录</button>
@@ -16,15 +16,14 @@
       <a href="javascript:;">忘记密码</a>
     </div>
   </div>
-  <Toast v-if="toastData.isShowToast" :message="toastData.toastMessage" />
+  <Toast v-if="isShowToast" :message="toastMessage" />
 </template>
 <script>
 import { useRouter } from "vue-router";
-import { reactive } from "@vue/reactivity";
+import { reactive, toRefs } from "@vue/reactivity";
 import { post } from "@/utils/request";
-import Toast,{toastEffect} from "@/components/Toast.vue";
+import Toast, { toastEffect } from "@/components/Toast.vue";
 import axios from "axios";
-
 
 export default {
   name: "Login",
@@ -34,7 +33,7 @@ export default {
       phone: "",
       password: "",
     });
-    const { toastData, showToast } = toastEffect();
+    const { isShowToast,toastMessage, showToast } = toastEffect();
     const router = useRouter();
     const handleLogin = async () => {
       try {
@@ -46,7 +45,7 @@ export default {
           showToast("登录失败，用户名或密码不正确");
         }
       } catch {
-        (error) => {
+        () => {
           showToast("发送请求失败!");
         };
       }
@@ -54,7 +53,9 @@ export default {
     const go2register = () => {
       router.push({ name: "Register" });
     };
-    return { loginData, toastData, handleLogin, go2register };
+    /* 将loginData解构并将解构后的数据return出去，然后再html中就可以不用以打点的方式引用 */
+    const { phone, password } = toRefs(loginData);
+    return { phone, password, isShowToast,toastMessage, handleLogin, go2register };
   },
 };
 </script>
