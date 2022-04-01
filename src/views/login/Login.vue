@@ -24,38 +24,49 @@ import { reactive, toRefs } from "@vue/reactivity";
 import { post } from "@/utils/request";
 import Toast, { toastEffect } from "@/components/Toast.vue";
 import axios from "axios";
-
+/* -----------------------------登录页逻辑 */
+const userLoginEffect = (showToast) => {
+  const loginData = reactive({
+    phone: "",
+    password: "",
+  });
+  const router = useRouter();
+  const handleLogin = async () => {
+    try {
+      const result = await post("/api/user/login", { phone: loginData.phone, password: loginData.password });
+      if (result.data.code === "0000") {
+        localStorage.setItem("isLogin", "true");
+        router.push({ name: "Home" });
+      } else {
+        showToast("登录失败，用户名或密码不正确");
+      }
+    } catch {
+      () => {
+        showToast("发送请求失败!");
+      };
+    }
+  };
+  /* 将loginData解构并将解构后的数据return出去，然后再html中就可以不用以打点的方式引用 */
+  const { phone, password } = toRefs(loginData);
+  return { phone, password, handleLogin };
+};
+/* -----------------------------跳转注册页逻辑 */
+const userGo2registerEffect = () => {
+  const router = useRouter();
+  const go2register = () => {
+    router.push({ name: "Register" });
+  };
+  return { go2register };
+};
+/* -----------------------------setup只用来展示代码调用执行的流程 */
 export default {
   name: "Login",
   components: { Toast },
   setup() {
-    const loginData = reactive({
-      phone: "",
-      password: "",
-    });
-    const { isShowToast,toastMessage, showToast } = toastEffect();
-    const router = useRouter();
-    const handleLogin = async () => {
-      try {
-        const result = await post("/api/user/login", { phone: loginData.phone, password: loginData.password });
-        if (result.data.code === "0000") {
-          localStorage.setItem("isLogin", "true");
-          router.push({ name: "Home" });
-        } else {
-          showToast("登录失败，用户名或密码不正确");
-        }
-      } catch {
-        () => {
-          showToast("发送请求失败!");
-        };
-      }
-    };
-    const go2register = () => {
-      router.push({ name: "Register" });
-    };
-    /* 将loginData解构并将解构后的数据return出去，然后再html中就可以不用以打点的方式引用 */
-    const { phone, password } = toRefs(loginData);
-    return { phone, password, isShowToast,toastMessage, handleLogin, go2register };
+    const { isShowToast, toastMessage, showToast } = toastEffect();
+    const { phone, password, handleLogin } = userLoginEffect(showToast);
+    const { go2register } = userGo2registerEffect();
+    return { phone, password, isShowToast, toastMessage, handleLogin, go2register };
   },
 };
 </script>
