@@ -4,8 +4,8 @@
       <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202221429453.png" alt="头像" />
     </div>
     <div class="container__userinput">
-      <input class="container__userinput__userphone" type="text" placeholder="请输入手机号" v-model="LoginData.phone"/>
-      <input class="container__userinput__userpassword" type="password" placeholder="请输入密码" v-model="LoginData.password"/>
+      <input class="container__userinput__userphone" type="text" placeholder="请输入手机号" v-model="loginData.phone" />
+      <input class="container__userinput__userpassword" type="password" placeholder="请输入密码" v-model="loginData.password" />
     </div>
     <div class="container__userhandle">
       <button class="container__userhandle__login" @click="handleLogin">登 录</button>
@@ -16,40 +16,52 @@
       <a href="javascript:;">忘记密码</a>
     </div>
   </div>
+  <Toast v-if="loginData.showToast" :message="loginData.toastMessage" />
 </template>
 <script>
 import { useRouter } from "vue-router";
 import { reactive } from "@vue/reactivity";
+import { post } from "@/utils/request";
+import Toast from "@/components/Toast.vue";
 import axios from "axios";
-import {post} from "@/utils/request"
 export default {
   name: "Login",
+  components: { Toast },
   setup() {
-    const LoginData = reactive({
+    const loginData = reactive({
       phone: "",
       password: "",
+      showToast: false,
+      toastMessage: "",
     });
     const router = useRouter();
+    const showToast = (message) => {
+      loginData.showToast = true;
+      loginData.toastMessage = message;
+      setTimeout(() => {
+        loginData.showToast = false;
+        loginData.toastMessage = "";
+      }, 2000);
+    };
     const handleLogin = async () => {
-      try{
-        const result = await post("/api/user/login", 
-        { phone: LoginData.phone, password: LoginData.password });
+      try {
+        const result = await post("/api/user/login", { phone: loginData.phone, password: loginData.password });
         if (result.data.code === "0000") {
-            localStorage.setItem("isLogin", "true");
-            router.push({ name: "Home" });
-          } else {
-            alert(result.data.desc);
-          }
-      }catch{
-        (error) => {
-          console.log(error);
+          localStorage.setItem("isLogin", "true");
+          router.push({ name: "Home" });
+        } else {
+          showToast('登录失败，用户名或密码不正确')
         }
+      } catch {
+        (error) => {
+          showToast('发送请求失败!')
+        };
       }
     };
     const go2register = () => {
       router.push({ name: "Register" });
     };
-    return {LoginData, handleLogin, go2register };
+    return { loginData, handleLogin, go2register };
   },
 };
 </script>
