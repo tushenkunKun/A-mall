@@ -2,6 +2,7 @@
   <div class="toast">{{message}}</div>
 </template>
 <script>
+import {reactive} from "vue";
 export default {
   name:'Toast',
   props:["message"],
@@ -9,6 +10,21 @@ export default {
     return{}
   }
 }
+export const toastEffect = () => {
+  const toastData = reactive({
+    isShowToast: false,
+    toastMessage: "",
+  });
+  const showToast = (message) => {
+    toastData.isShowToast = true;
+    toastData.toastMessage = message;
+    setTimeout(() => {
+      toastData.isShowToast = false;
+      toastData.toastMessage = "";
+    }, 2000);
+  };
+  return { toastData, showToast };
+};
 </script>
 <style lang='scss' scoped>
   .toast{

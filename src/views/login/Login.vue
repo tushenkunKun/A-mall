@@ -16,14 +16,16 @@
       <a href="javascript:;">忘记密码</a>
     </div>
   </div>
-  <Toast v-if="loginData.showToast" :message="loginData.toastMessage" />
+  <Toast v-if="toastData.isShowToast" :message="toastData.toastMessage" />
 </template>
 <script>
 import { useRouter } from "vue-router";
 import { reactive } from "@vue/reactivity";
 import { post } from "@/utils/request";
-import Toast from "@/components/Toast.vue";
+import Toast,{toastEffect} from "@/components/Toast.vue";
 import axios from "axios";
+
+
 export default {
   name: "Login",
   components: { Toast },
@@ -31,18 +33,9 @@ export default {
     const loginData = reactive({
       phone: "",
       password: "",
-      showToast: false,
-      toastMessage: "",
     });
+    const { toastData, showToast } = toastEffect();
     const router = useRouter();
-    const showToast = (message) => {
-      loginData.showToast = true;
-      loginData.toastMessage = message;
-      setTimeout(() => {
-        loginData.showToast = false;
-        loginData.toastMessage = "";
-      }, 2000);
-    };
     const handleLogin = async () => {
       try {
         const result = await post("/api/user/login", { phone: loginData.phone, password: loginData.password });
@@ -50,18 +43,18 @@ export default {
           localStorage.setItem("isLogin", "true");
           router.push({ name: "Home" });
         } else {
-          showToast('登录失败，用户名或密码不正确')
+          showToast("登录失败，用户名或密码不正确");
         }
       } catch {
         (error) => {
-          showToast('发送请求失败!')
+          showToast("发送请求失败!");
         };
       }
     };
     const go2register = () => {
       router.push({ name: "Register" });
     };
-    return { loginData, handleLogin, go2register };
+    return { loginData, toastData, handleLogin, go2register };
   },
 };
 </script>
