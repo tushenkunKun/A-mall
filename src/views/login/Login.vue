@@ -21,6 +21,7 @@
 import { useRouter } from "vue-router";
 import { reactive } from "@vue/reactivity";
 import axios from "axios";
+import {post} from "@/utils/request"
 export default {
   name: "Login",
   setup() {
@@ -29,21 +30,21 @@ export default {
       password: "",
     });
     const router = useRouter();
-    const handleLogin = () => {
-      axios
-        .post("https://www.fastmock.site/mock/961f5366e49b46ec8b9d6f0b4be1e6ff/vuejd/api/user/login", { phone: LoginData.phone, password: LoginData.password })
-        .then((response) => {
-          // console.log(response);
-          if (response.data.code === "0000") {
+    const handleLogin = async () => {
+      try{
+        const result = await post("/api/user/login", 
+        { phone: LoginData.phone, password: LoginData.password });
+        if (result.data.code === "0000") {
             localStorage.setItem("isLogin", "true");
             router.push({ name: "Home" });
           } else {
-            alert(response.data.desc);
+            alert(result.data.desc);
           }
-        })
-        .catch((error) => {
+      }catch{
+        (error) => {
           console.log(error);
-        });
+        }
+      }
     };
     const go2register = () => {
       router.push({ name: "Register" });
