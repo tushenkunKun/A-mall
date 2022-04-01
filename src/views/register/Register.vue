@@ -17,10 +17,18 @@
   </div>
 </template>
 <script>
+import { useRouter } from "vue-router";
 export default {
   name: "Register",
   setup() {
-    return {};
+    const router = useRouter();
+    const handleRegister = () => {
+      router.push({ name: "Login" });
+    };
+    const go2login = () => {
+      router.push({ name: "Login" });
+    };
+    return { handleRegister, go2login };
   },
 };
 </script>

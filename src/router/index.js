@@ -27,6 +27,13 @@ const routes = [
     path: "/register",
     name: "Register",
     component: () => import("../views/register/Register.vue"),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.isLogin === "true") {
+        next({ name: "Home" });
+      } else {
+        next();
+      }
+    },
   },
 ];
 
