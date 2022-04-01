@@ -4,8 +4,8 @@
       <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202221429453.png" alt="头像" />
     </div>
     <div class="container__userinput">
-      <input class="container__userinput__userphone" type="text" placeholder="请输入手机号" />
-      <input class="container__userinput__userpassword" type="password" placeholder="请输入密码" />
+      <input class="container__userinput__userphone" type="text" placeholder="请输入手机号" v-model="LoginData.phone"/>
+      <input class="container__userinput__userpassword" type="password" placeholder="请输入密码" v-model="LoginData.password"/>
     </div>
     <div class="container__userhandle">
       <button class="container__userhandle__login" @click="handleLogin">登 录</button>
@@ -18,19 +18,37 @@
   </div>
 </template>
 <script>
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
+import { reactive } from "@vue/reactivity";
+import axios from "axios";
 export default {
   name: "Login",
   setup() {
+    const LoginData = reactive({
+      phone: "",
+      password: "",
+    });
     const router = useRouter();
-    const handleLogin=()=>{
-      localStorage.setItem("isLogin","true");
-      router.push({name:"Home"});
+    const handleLogin = () => {
+      axios
+        .post("https://www.fastmock.site/mock/961f5366e49b46ec8b9d6f0b4be1e6ff/vuejd/api/user/login", { phone: LoginData.phone, password: LoginData.password })
+        .then((response) => {
+          // console.log(response);
+          if (response.data.code === "0000") {
+            localStorage.setItem("isLogin", "true");
+            router.push({ name: "Home" });
+          } else {
+            alert(response.data.desc);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
-    const go2register=()=>{
-      router.push({name:"Register"});
+    const go2register = () => {
+      router.push({ name: "Register" });
     };
-    return {handleLogin,go2register};
+    return {LoginData, handleLogin, go2register };
   },
 };
 </script>
