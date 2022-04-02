@@ -1,25 +1,15 @@
 <template>
   <div class="nearby">
     <div class="nearby__title">附近店铺</div>
-    <div class="nearby__item" v-for="item of nearbyItems" :key="item.id">
-      <div class="nearby__item__img">
-        <img :src="item.imgUrl" alt="" />
-      </div>
-      <div class="nearby__item__desc">
-        <div class="nearby__item__desc__name">{{ item.dealer }}</div>
-        <div class="nearby__item__desc__tags">
-          <span class="nearby__item__desc__tags__tag" v-for="(tagItem, tagIndex) of item.tags" :key="tagIndex">{{ tagItem }}</span>
-        </div>
-        <div class="nearby__item__desc__notice">{{ item.notice }}</div>
-      </div>
-    </div>
+    <ShopInfo v-for="item of nearbyItems" :key="item.id" :dealerInfo="item"/>
   </div>
   <Toast v-if="isShowToast" :message="toastMessage" />
 </template>
 <script>
-import Toast, { toastEffect } from "@/components/Toast.vue";
 import { reactive, ref } from "@vue/reactivity";
 import {get} from "@/utils/request"
+import Toast, { toastEffect } from "@/components/Toast.vue";
+import ShopInfo from "@/components/ShopInfo.vue"
 
 /* -------------------主页附近店铺事件 */
 const homeNearbyEffect = (showToast) => {
@@ -38,7 +28,7 @@ const homeNearbyEffect = (showToast) => {
 };
 export default {
   name: "Nearby",
-  components: { Toast },
+  components: { Toast,ShopInfo },
   setup() {
     const { isShowToast, toastMessage, showToast } = toastEffect();
     const { nearbyItems } = homeNearbyEffect(showToast);
@@ -54,36 +44,6 @@ export default {
     font-size: 18rem;
     color: #333;
     margin-bottom: 14rem;
-  }
-  &__item {
-    display: flex;
-    margin-bottom: 12rem;
-    &__img {
-      margin-right: 16rem;
-      & img {
-        width: 56rem;
-        height: 56rem;
-      }
-    }
-    &__desc {
-      border-bottom: 1px solid #f1f1f1;
-      flex-grow: 1;
-      color: #333333;
-      font-family: PingFangSC-Regular;
-      &__name {
-        font-size: 16rem;
-        margin-bottom: 8rem;
-      }
-      &__tags {
-        font-size: 13rem;
-        margin-bottom: 8rem;
-      }
-      &__notice {
-        font-size: 13rem;
-        color: #e93b3b;
-        margin-bottom: 12rem;
-      }
-    }
   }
 }
 </style>
