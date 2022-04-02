@@ -6,71 +6,43 @@
         <img :src="item.imgUrl" alt="" />
       </div>
       <div class="nearby__item__desc">
-        <div class="nearby__item__desc__name">{{item.dealer}}</div>
+        <div class="nearby__item__desc__name">{{ item.dealer }}</div>
         <div class="nearby__item__desc__tags">
-          <span class="nearby__item__desc__tags__tag" v-for="(tagItem,tagIndex) of item.tags" :key="tagIndex">{{tagItem}}</span>
+          <span class="nearby__item__desc__tags__tag" v-for="(tagItem, tagIndex) of item.tags" :key="tagIndex">{{ tagItem }}</span>
         </div>
-        <div class="nearby__item__desc__notice">{{item.notice}}</div>
+        <div class="nearby__item__desc__notice">{{ item.notice }}</div>
       </div>
-    </div>   
+    </div>
   </div>
+  <Toast v-if="isShowToast" :message="toastMessage" />
 </template>
 <script>
+import Toast, { toastEffect } from "@/components/Toast.vue";
+import { reactive, ref } from "@vue/reactivity";
+import {get} from "@/utils/request"
+
+/* -------------------主页附近店铺事件 */
+const homeNearbyEffect = (showToast) => {
+  // 注意这里使用的是ref处理数组，后面赋值时需要用到.value的方法
+  const nearbyItems = ref([]);
+  const getNearbyItems = async () => {
+    try {
+      const result = await get("/api/home/nearby");
+      nearbyItems.value=result.data.data;
+    } catch (error) {
+      showToast("获取数据失败");
+    }
+  };
+  getNearbyItems();
+  return { nearbyItems };
+};
 export default {
   name: "Nearby",
+  components: { Toast },
   setup() {
-    const nearbyItems=[
-      {
-        id:0,
-        imgUrl:'https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202211407079.png',
-        dealer:'沃尔玛-0',
-        tags:['月售1万+','起送¥0','基础运费¥5'],
-        notice:'VIP尊享满89元减4元运费券（每月3张）'
-      },
-      {
-        id:1,
-        imgUrl:'https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202211407079.png',
-        dealer:'沃尔玛-1',
-        tags:['月售1万+','起送¥0','基础运费¥5'],
-        notice:'VIP尊享满89元减4元运费券（每月3张）'
-      },
-      {
-        id:2,
-        imgUrl:'https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202211407079.png',
-        dealer:'沃尔玛-2',
-        tags:['月售1万+','起送¥0','基础运费¥5'],
-        notice:'VIP尊享满89元减4元运费券（每月3张）'
-      },
-      {
-        id:3,
-        imgUrl:'https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202211407079.png',
-        dealer:'沃尔玛-3',
-        tags:['月售1万+','起送¥0','基础运费¥5'],
-        notice:'VIP尊享满89元减4元运费券（每月3张）'
-      },
-      {
-        id:4,
-        imgUrl:'https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202211407079.png',
-        dealer:'沃尔玛-4',
-        tags:['月售1万+','起送¥0','基础运费¥5'],
-        notice:'VIP尊享满89元减4元运费券（每月3张）'
-      },
-      {
-        id:5,
-        imgUrl:'https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202211407079.png',
-        dealer:'沃尔玛-5',
-        tags:['月售1万+','起送¥0','基础运费¥5'],
-        notice:'VIP尊享满89元减4元运费券（每月3张）'
-      },
-      {
-        id:6,
-        imgUrl:'https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202211407079.png',
-        dealer:'沃尔玛-6',
-        tags:['月售1万+','起送¥0','基础运费¥5'],
-        notice:'VIP尊享满89元减4元运费券（每月3张）'
-      },
-    ]
-    return {nearbyItems};
+    const { isShowToast, toastMessage, showToast } = toastEffect();
+    const { nearbyItems } = homeNearbyEffect(showToast);
+    return { isShowToast, toastMessage, nearbyItems };
   },
 };
 </script>
@@ -86,7 +58,7 @@ export default {
   &__item {
     display: flex;
     margin-bottom: 12rem;
-    &__img{
+    &__img {
       margin-right: 16rem;
       & img {
         width: 56rem;
@@ -100,7 +72,7 @@ export default {
       font-family: PingFangSC-Regular;
       &__name {
         font-size: 16rem;
-        margin-bottom:8rem;
+        margin-bottom: 8rem;
       }
       &__tags {
         font-size: 13rem;
