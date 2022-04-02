@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Docker from "./home/Docker.vue";
+import Docker from "@/components/Docker.vue";
 import Header from "./home/Header.vue";
 import Search from "./home/Search.vue";
 import Banner from "./home/Banner.vue";
