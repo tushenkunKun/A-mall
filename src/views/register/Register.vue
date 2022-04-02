@@ -32,23 +32,35 @@ const userRegisterEffect = (showToast) => {
   });
   const router = useRouter();
   const handleRegister = async () => {
-    if (registerData.password !== registerData.confirmPassword) {
-      showToast("密码不一致，请再次确认密码");
-    } else {
-      try {
-        const result = await post("/api/user/register", { phone: registerData.phone, password: registerData.password });
-        if (result.data.code === "0000") {
-          // 注册成功自动登录
-          localStorage.setItem("isLogin", "true");
-          router.push({ name: "Home" });
-        } else {
-          showToast("注册失败，请重试");
-        }
-      } catch {
-        () => {
-          showToast("发送请求失败!");
-        };
+    try {
+      if (registerData.phone === "") {
+        showToast("请填写手机号");
+        return;
       }
+      if (registerData.password === "") {
+        showToast("请填写密码");
+        return;
+      }
+      if (registerData.confirmPassword === "") {
+        showToast("请确认密码");
+        return;
+      }
+      if (registerData.password !== registerData.confirmPassword) {
+        showToast("密码不一致，请再次确认密码");
+        return;
+      }
+      const result = await post("/api/user/register", { phone: registerData.phone, password: registerData.password });
+      if (result.data.code === "0000") {
+        // 注册成功自动登录
+        localStorage.setItem("isLogin", "true");
+        router.push({ name: "Home" });
+      } else {
+        showToast("注册失败，请重试");
+      }
+    } catch {
+      () => {
+        showToast("发送请求失败!");
+      };
     }
   };
   /* 将registerData解构并将解构后的数据return出去，然后再html中就可以不用以打点的方式引用 */

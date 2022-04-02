@@ -33,6 +33,14 @@ const userLoginEffect = (showToast) => {
   const router = useRouter();
   const handleLogin = async () => {
     try {
+      if (loginData.phone==='') {
+        showToast('请填写手机号')
+        return
+      }
+      if (loginData.password==='') {
+        showToast('请填写密码')
+        return
+      }
       const result = await post("/api/user/login", { phone: loginData.phone, password: loginData.password });
       if (result.data.code === "0000") {
         localStorage.setItem("isLogin", "true");
