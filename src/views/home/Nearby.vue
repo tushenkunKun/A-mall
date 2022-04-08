@@ -1,7 +1,7 @@
 <template>
   <div class="nearby">
     <div class="nearby__title">附近店铺</div>
-    <ShopInfo v-for="item of nearbyItems" :key="item.id" :dealerInfo="item"/>
+    <ShopInfo v-for="item of nearbyItems" :key="item.id" :dealerInfo="item" :showBorder="true"/>
   </div>
   <Toast v-if="isShowToast" :message="toastMessage" />
 </template>

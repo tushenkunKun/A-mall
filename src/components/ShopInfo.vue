@@ -3,7 +3,7 @@
     <div class="shop-info__img">
       <img :src="dealerInfo.imgUrl" alt="" />
     </div>
-    <div class="shop-info__desc">
+    <div :class="{'shop-info__desc':true,'shop-info__desc-border':showBorder}">
       <div class="shop-info__desc__name">{{ dealerInfo.dealer }}</div>
       <div class="shop-info__desc__tags">
         <span class="shop-info__desc__tags__tag" v-for="(tagItem, tagIndex) of dealerInfo.tags" :key="tagIndex">{{ tagItem }}</span>
@@ -15,7 +15,7 @@
 <script>
 export default {
   name: "ShopInfo",
-  props: ["dealerInfo"],
+  props: ["dealerInfo","showBorder"],
   setup() {
     return {};
   },
@@ -33,10 +33,12 @@ export default {
     }
   }
   &__desc {
-    border-bottom: 1px solid #f1f1f1;
     flex-grow: 1;
     color: #333333;
     font-family: PingFangSC-Regular;
+    &-border{
+      border-bottom: 1px solid #f1f1f1;
+    }
     &__name {
       font-size: 16rem;
       margin-bottom: 8rem;

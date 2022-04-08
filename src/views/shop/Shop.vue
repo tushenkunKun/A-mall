@@ -1,6 +1,6 @@
 <template>
 <div class="shop">
-  <ShopInfo :dealerInfo="item"/>
+  <ShopInfo :dealerInfo="item" :showBorder="false"/>
 </div>
 </template>
 <script>
