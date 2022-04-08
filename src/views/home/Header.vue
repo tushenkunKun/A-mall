@@ -34,7 +34,7 @@ export default {
     }
     &__text {
       font-family: PingFangSC-Regular;
-      font-size: 16px;
+      font-size: 16rem;
       color: #333;
     }
   }

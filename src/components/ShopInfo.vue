@@ -37,7 +37,7 @@ export default {
     color: #333333;
     font-family: PingFangSC-Regular;
     &-border{
-      border-bottom: 1px solid #f1f1f1;
+      border-bottom: 1rem solid #f1f1f1;
     }
     &__name {
       font-size: 16rem;
