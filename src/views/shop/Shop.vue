@@ -14,22 +14,34 @@
 </template>
 <script>
 import ShopInfo from "@/components/ShopInfo.vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { ref } from "@vue/reactivity";
+import { get } from "@/utils/request";
+/* -------------------------通过接口获取点击的商铺的具体信息 */
+const dealerInfoEffect = () => {
+  const item = ref({});
+  const route = useRoute();
+  const getItemData = async () => {
+    const result = await get(`/api/shop/${route.params.id}`);
+    item.value = result.data.data;
+  };
+  return { item, getItemData };
+};
+/* -------------------------返回跳转之前的页面功能 */
+const back2prevPage = () => {
+  const router = useRouter();
+  const back = () => {
+    router.back();
+  };
+  return { back };
+};
 export default {
   name: "Shop",
   components: { ShopInfo },
   setup() {
-    const router = useRouter();
-    const item = {
-      id: 1,
-      imgUrl: "https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202211407079.png",
-      dealer: "沃尔玛-1",
-      tags: ["月售1万+", "起送¥1", "基础运费¥1"],
-      notice: "VIP尊享满89元减4元运费券（每月1张）",
-    };
-    const back = () => {
-      router.back();
-    };
+    const { item, getItemData } = dealerInfoEffect();
+    const {back} = back2prevPage();
+    getItemData();
     return { item, back };
   },
 };
