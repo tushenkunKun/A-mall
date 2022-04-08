@@ -9,7 +9,7 @@
         <input type="text" class="shop__header__search__input" placeholder="请输入商品名称搜索" />
       </div>
     </div>
-    <ShopInfo :dealerInfo="item" :showBorder="false" />
+    <ShopInfo :dealerInfo="item" :showBorder="false" v-if="item.imgUrl"/>
   </div>
 </template>
 <script>
