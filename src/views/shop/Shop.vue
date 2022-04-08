@@ -10,10 +10,12 @@
       </div>
     </div>
     <ShopInfo :dealerInfo="item" :showBorder="false" v-if="item.imgUrl"/>
+    <ShopContent />
   </div>
 </template>
 <script>
 import ShopInfo from "@/components/ShopInfo.vue";
+import ShopContent from "@/views/shop/components/Content.vue";
 import { useRoute, useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 import { get } from "@/utils/request";
@@ -37,7 +39,7 @@ const back2prevPage = () => {
 };
 export default {
   name: "Shop",
-  components: { ShopInfo },
+  components: { ShopInfo,ShopContent },
   setup() {
     const { item, getItemData } = dealerInfoEffect();
     const {back} = back2prevPage();
