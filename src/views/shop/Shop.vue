@@ -2,7 +2,7 @@
   <div class="shop">
     <div class="shop__header">
       <div class="shop__header__back">
-        <span class="shop__header__back__icon">&#xe624;</span>
+        <span class="shop__header__back__icon" @click="back">&#xe624;</span>
       </div>
       <div class="shop__header__search">
         <span class="shop__header__search__icon">&#xe622;</span>
@@ -14,10 +14,12 @@
 </template>
 <script>
 import ShopInfo from "@/components/ShopInfo.vue";
+import { useRouter } from "vue-router";
 export default {
   name: "Shop",
   components: { ShopInfo },
   setup() {
+    const router = useRouter();
     const item = {
       id: 1,
       imgUrl: "https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202211407079.png",
@@ -25,7 +27,10 @@ export default {
       tags: ["月售1万+", "起送¥1", "基础运费¥1"],
       notice: "VIP尊享满89元减4元运费券（每月1张）",
     };
-    return { item };
+    const back = () => {
+      router.back();
+    };
+    return { item, back };
   },
 };
 </script>
