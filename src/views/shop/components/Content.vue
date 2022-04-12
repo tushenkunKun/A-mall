@@ -34,32 +34,46 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { get } from "@/utils/request";
 import { useRoute } from "vue-router";
+// 定义变量
+const shopNav = [
+  { name: "all", text: "全部商品" },
+  { name: "seckill", text: "秒杀" },
+  { name: "fruit", text: "新鲜水果" },
+  { name: "snacks", text: "休闲食品" },
+  { name: "vegetable", text: "时令蔬菜" },
+  { name: "meat", text: "肉蛋家禽" },
+];
+/* ---------------------------切换shopNav功能 */
+const shopNavEffect = () => {
+  const currentNavName = ref("all");
+  const checkedNav = (itemName) => {
+    currentNavName.value = itemName;
+  };
+  return { currentNavName, checkedNav };
+};
+/* ---------------------------切换shopList功能 */
+const shopListEffect = (currentNavName) => {
+  const shopList = ref([]);
+  const route = useRoute();
+  const shopId = route.params.id;
+  const getShopListData = async (shopId, shopNavName) => {
+    const result = await get(`/api/shop/${shopId}/${shopNavName}`);
+    shopList.value = result.data.data;
+  };
+  watchEffect(() => {
+    getShopListData(shopId, currentNavName.value);
+  });
+  return { shopList };
+};
+
 export default {
   name: "ShopContent",
   setup() {
-    const shopNav = [
-      { name: "all", text: "全部商品" },
-      { name: "seckill", text: "秒杀" },
-      { name: "fruit", text: "新鲜水果" },
-      { name: "snacks", text: "休闲食品" },
-      { name: "vegetable", text: "时令蔬菜" },
-      { name: "meat", text: "肉蛋家禽" },
-    ];
-    const shopList = ref([]);
-    const currentNavName = ref("all");
-    const checkedNav = (itemName) => {
-      currentNavName.value = itemName;
-    };
-    const route = useRoute();
-    const shopId = route.params.id;
-    const getShopListData = async (shopId, shopNavName) => {
-      const result = await get(`/api/shop/${shopId}/${shopNavName}`);
-      shopList.value = result.data.data;
-    };
-    getShopListData(shopId, "all");
+    const { currentNavName, checkedNav } = shopNavEffect();
+    const { shopList } = shopListEffect(currentNavName);
     return { shopNav, currentNavName, shopList, checkedNav };
   },
 };
