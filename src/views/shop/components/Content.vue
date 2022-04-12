@@ -2,7 +2,7 @@
   <div class="shop-content">
     <div class="shop-content__nav">
       <div
-        :class="{ 'shop-content__nav__item': true, 'shop-content__nav__item--active': item.name === currentName }"
+        :class="{ 'shop-content__nav__item': true, 'shop-content__nav__item--active': item.name === currentNavName }"
         v-for="(item, index) of shopNav"
         :key="index"
         :tab-name="item.name"
@@ -17,11 +17,11 @@
           <img :src="item.imgUrl" alt="" />
         </div>
         <div class="shop-content__list__item__desc">
-          <div class="shop-content__list__item__desc__weight">{{item.weight}}</div>
-          <div class="shop-content__list__item__desc__sale-num">月售{{item.sales}}件</div>
+          <div class="shop-content__list__item__desc__weight">{{ item.weight }}</div>
+          <div class="shop-content__list__item__desc__sale-num">月售{{ item.sales }}件</div>
           <div class="shop-content__list__item__desc__price">
-            <div class="shop-content__list__item__desc__price__promotion-price">¥{{item.promotionPrice}}</div>
-            <div class="shop-content__list__item__desc__price__original-price">¥{{item.originalPrice}}</div>
+            <div class="shop-content__list__item__desc__price__promotion-price">¥{{ item.promotionPrice }}</div>
+            <div class="shop-content__list__item__desc__price__original-price">¥{{ item.originalPrice }}</div>
             <div class="shop-content__list__item__desc__price__count">
               <button class="shop-content__list__item__desc__price__count__minus">&#xe780;</button>
               <span class="shop-content__list__item__desc__price__count__number">88</span>
@@ -35,6 +35,8 @@
 </template>
 <script>
 import { ref } from "vue";
+import { get } from "@/utils/request";
+import { useRoute } from "vue-router";
 export default {
   name: "ShopContent",
   setup() {
@@ -46,45 +48,19 @@ export default {
       { name: "vegetable", text: "时令蔬菜" },
       { name: "meat", text: "肉蛋家禽" },
     ];
-    const shopList = [
-      {
-        id: 1,
-        weight: "全部-番茄150g/份",
-        imgUrl: "https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261527635.png",
-        sales: 1,
-        promotionPrice: 1.6,
-        originalPrice: 1.6,
-      },
-      {
-        id: 2,
-        weight: "全部-番茄250g/份",
-        imgUrl: "https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261527853.png",
-        sales: 2,
-        promotionPrice: 2.6,
-        originalPrice: 2.6,
-      },
-      {
-        id: 3,
-        weight: "全部-番茄350g/份",
-        imgUrl: "https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261527922.png",
-        sales: 3,
-        promotionPrice: 3.6,
-        originalPrice: 3.6,
-      },
-      {
-        id: 4,
-        weight: "全部-番茄450g/份",
-        imgUrl: "https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261530259.png",
-        sales: 4,
-        promotionPrice: 4.6,
-        originalPrice: 4.6,
-      },
-    ];
-    const currentName = ref("all");
+    const shopList = ref([]);
+    const currentNavName = ref("all");
     const checkedNav = (itemName) => {
-      currentName.value = itemName;
+      currentNavName.value = itemName;
     };
-    return { shopNav, currentName, shopList, checkedNav };
+    const route = useRoute();
+    const shopId = route.params.id;
+    const getShopListData = async (shopId, shopNavName) => {
+      const result = await get(`/api/shop/${shopId}/${shopNavName}`);
+      shopList.value = result.data.data;
+    };
+    getShopListData(shopId, "all");
+    return { shopNav, currentNavName, shopList, checkedNav };
   },
 };
 </script>
