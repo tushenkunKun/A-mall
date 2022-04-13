@@ -25,9 +25,9 @@
               <div class="shop-content__list__item__desc__price__unit-price__original-price">¥{{ item.originalPrice }}</div>
             </div>
             <div class="shop-content__list__item__desc__count">
-              <button class="shop-content__list__item__desc__count__minus" v-show="cartData[shopId][item.id]['count']">&#xe780;</button>
-              <span class="shop-content__list__item__desc__count__number" v-show="cartData[shopId][item.id]['count']">
-                {{ cartData[shopId][item.id]["count"] }}
+              <button class="shop-content__list__item__desc__count__minus" v-show="cartData?.[shopId]?.[item.id]?.['count']">&#xe780;</button>
+              <span class="shop-content__list__item__desc__count__number" v-show="cartData?.[shopId]?.[item.id]?.['count']">
+                {{ cartData?.[shopId]?.[item.id]?.['count'] }}
               </span>
               <button class="shop-content__list__item__desc__count__plus">&#xe7e0;</button>
             </div>
