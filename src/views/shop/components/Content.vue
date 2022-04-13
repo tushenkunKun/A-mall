@@ -25,11 +25,30 @@
               <div class="shop-content__list__item__desc__price__unit-price__original-price">¥{{ item.originalPrice }}</div>
             </div>
             <div class="shop-content__list__item__desc__count">
-              <button class="shop-content__list__item__desc__count__minus" v-show="cartData?.[shopId]?.[item.id]?.['count']">&#xe780;</button>
+              <button
+                class="shop-content__list__item__desc__count__minus"
+                v-show="cartData?.[shopId]?.[item.id]?.['count']"
+                @click="
+                  () => {
+                    changeItem2cart(shopId, item.id, -1);
+                  }
+                "
+              >
+                &#xe780;
+              </button>
               <span class="shop-content__list__item__desc__count__number" v-show="cartData?.[shopId]?.[item.id]?.['count']">
-                {{ cartData?.[shopId]?.[item.id]?.['count'] }}
+                {{ cartData?.[shopId]?.[item.id]?.["count"] }}
               </span>
-              <button class="shop-content__list__item__desc__count__plus">&#xe7e0;</button>
+              <button
+                class="shop-content__list__item__desc__count__plus"
+                @click="
+                  () => {
+                    changeItem2cart(shopId, item.id, 1);
+                  }
+                "
+              >
+                &#xe7e0;
+              </button>
             </div>
           </div>
         </div>
@@ -77,15 +96,18 @@ const shopListEffect = (currentNavName) => {
 const cartEffect = () => {
   const store = useStore();
   const { cartData } = toRefs(store.state);
-  return { cartData };
+  const changeItem2cart = (shopId, itemId, num) => {
+    store.commit("changeItem2cart", { shopId, itemId, num });
+  };
+  return { cartData, changeItem2cart };
 };
 export default {
   name: "ShopContent",
   setup() {
-    const { cartData } = cartEffect();
+    const { cartData, changeItem2cart } = cartEffect();
     const { currentNavName, checkedNav } = shopNavEffect();
     const { shopList, shopId } = shopListEffect(currentNavName);
-    return { shopNav, currentNavName, shopList, checkedNav, cartData, shopId };
+    return { shopNav, currentNavName, shopList, checkedNav, cartData, shopId, changeItem2cart };
   },
 };
 </script>
