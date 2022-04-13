@@ -20,12 +20,16 @@
           <div class="shop-content__list__item__desc__weight">{{ item.weight }}</div>
           <div class="shop-content__list__item__desc__sale-num">月售{{ item.sales }}件</div>
           <div class="shop-content__list__item__desc__price">
-            <div class="shop-content__list__item__desc__price__promotion-price">¥{{ item.promotionPrice }}</div>
-            <div class="shop-content__list__item__desc__price__original-price">¥{{ item.originalPrice }}</div>
-            <div class="shop-content__list__item__desc__price__count">
-              <button class="shop-content__list__item__desc__price__count__minus">&#xe780;</button>
-              <span class="shop-content__list__item__desc__price__count__number">88</span>
-              <button class="shop-content__list__item__desc__price__count__plus">&#xe7e0;</button>
+            <div class="shop-content__list__item__desc__price__unit-price">
+              <div class="shop-content__list__item__desc__price__unit-price__promotion-price">¥{{ item.promotionPrice }}</div>
+              <div class="shop-content__list__item__desc__price__unit-price__original-price">¥{{ item.originalPrice }}</div>
+            </div>
+            <div class="shop-content__list__item__desc__count">
+              <button class="shop-content__list__item__desc__count__minus" v-show="cartData[shopId][item.id]['count']">&#xe780;</button>
+              <span class="shop-content__list__item__desc__count__number" v-show="cartData[shopId][item.id]['count']">
+                {{ cartData[shopId][item.id]["count"] }}
+              </span>
+              <button class="shop-content__list__item__desc__count__plus">&#xe7e0;</button>
             </div>
           </div>
         </div>
@@ -34,9 +38,10 @@
   </div>
 </template>
 <script>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, toRefs } from "vue";
 import { get } from "@/utils/request";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 // 定义变量
 const shopNav = [
   { name: "all", text: "全部商品" },
@@ -66,15 +71,21 @@ const shopListEffect = (currentNavName) => {
   watchEffect(() => {
     getShopListData(shopId, currentNavName.value);
   });
-  return { shopList };
+  return { shopList, shopId };
 };
-
+/* ---------------------------商品增减个数的功能逻辑 */
+const cartEffect = () => {
+  const store = useStore();
+  const { cartData } = toRefs(store.state);
+  return { cartData };
+};
 export default {
   name: "ShopContent",
   setup() {
+    const { cartData } = cartEffect();
     const { currentNavName, checkedNav } = shopNavEffect();
-    const { shopList } = shopListEffect(currentNavName);
-    return { shopNav, currentNavName, shopList, checkedNav };
+    const { shopList, shopId } = shopListEffect(currentNavName);
+    return { shopNav, currentNavName, shopList, checkedNav, cartData, shopId };
   },
 };
 </script>
@@ -137,44 +148,48 @@ export default {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          &__promotion-price {
-            font-family: PingFangSC-Semibold;
-            font-size: 14rem;
-            color: #e93b3b;
-            line-height: 20rem;
-            &::first-letter {
-              font-size: 12rem;
-            }
-          }
-          &__original-price {
-            font-family: PingFangSC-Regular;
-            font-size: 10rem;
-            color: #999;
-            line-height: 20rem;
-            &::first-letter {
-              font-size: 12rem;
-            }
-          }
-          &__count {
+          &__unit-price {
             display: flex;
-            align-items: center;
-            &__minus {
-              color: #666666;
-              font-size: 20rem;
-              background: none;
-            }
-            &__number {
-              font-family: PingFangSC-Regular;
+            &__promotion-price {
+              font-family: PingFangSC-Semibold;
               font-size: 14rem;
-              color: #333333;
-              margin-left: 6rem;
-              margin-right: 6rem;
+              color: #e93b3b;
+              line-height: 20rem;
+              margin-right: 10rem;
+              &::first-letter {
+                font-size: 12rem;
+              }
             }
-            &__plus {
-              font-size: 17rem;
-              color: #0091ff;
-              background: none;
+            &__original-price {
+              font-family: PingFangSC-Regular;
+              font-size: 10rem;
+              color: #999;
+              line-height: 20rem;
+              &::first-letter {
+                font-size: 12rem;
+              }
             }
+          }
+        }
+        &__count {
+          display: flex;
+          align-items: center;
+          &__minus {
+            color: #666666;
+            font-size: 20rem;
+            background: none;
+          }
+          &__number {
+            font-family: PingFangSC-Regular;
+            font-size: 14rem;
+            color: #333333;
+            margin-left: 6rem;
+            margin-right: 6rem;
+          }
+          &__plus {
+            font-size: 17rem;
+            color: #0091ff;
+            background: none;
           }
         }
       }
