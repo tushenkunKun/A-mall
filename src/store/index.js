@@ -5,10 +5,10 @@ export default createStore({
     cartData: {
       /* shopId:{
         itemId:{
-          itemInfo
+          item
         }
         itemId:{
-          itemInfo
+          item
         }
       }
       */
@@ -30,11 +30,15 @@ export default createStore({
   },
   getters: {},
   mutations: {
+    /* shopInfo--》shopId对应的店铺
+       item--》 店铺下itemId对应的商品信息
+     */
     changeItem2cart(state, payload) {
       const { shopId, itemId,itemInfo, num } = payload;
-      // 判断是否有shopId
+      console.log(state.cartData[shopId]);
+      // 判断是否有shopId（判断vuex中是否有点进来的店铺）
       const shopInfo = state.cartData[shopId] || {};
-      // 判断是否有itemId
+      // 判断是否有itemId（判断vuex中这个店铺有没有点到的商品）
       let item = null;
       if (shopInfo[itemId]) {
         item = shopInfo[itemId];
@@ -44,6 +48,7 @@ export default createStore({
       }
       // 数量改变
       item.count += num;
+      /* 如果商品数量为0，将商品信息shopInfo[itemId]移除 */
       // 把item加入到shopInfo中
       shopInfo[itemId] = item;
       // 把shopInfo加入到cartData中

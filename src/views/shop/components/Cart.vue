@@ -3,11 +3,11 @@
     <div class="cart__info">
       <div class="cart__info__icon">
         <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261637089.png" alt="" />
-        <span class="cart__info__icon__number">{{ total }}</span>
+        <span class="cart__info__icon__number">{{ totalNumber }}</span>
       </div>
       <div class="cart__info__count">
         总计：
-        <span class="cart__info__count__total-price">¥128</span>
+        <span class="cart__info__count__total-price">¥ {{ totalPrice }}</span>
       </div>
     </div>
     <div class="cart__payment">去结算</div>
@@ -26,8 +26,8 @@ export default {
     const shopId = route.params.id;
     // 获取购物车的数据
     const cartData = store.state.cartData;
-    // 定义计算属性total
-    const total = computed(() => {
+    // 定义计算属性totalNumber,  计算总量
+    const totalNumber = computed(() => {
       // 获取此店铺id下的所有商品
       const itemList = cartData[shopId];
       // 计算总量
@@ -39,7 +39,21 @@ export default {
       }
       return count;
     });
-    return { total };
+    // 定义计算属性totalNumber,  计算总价
+    const totalPrice = computed(() => {
+      // 获取此店铺id下的所有商品
+      const itemList = cartData[shopId];
+      // 计算总价
+      let sum = 0;
+      /* 如果有数量记录，就计算，没有就直接返回 */
+      if (itemList) {
+        for (const key in itemList) {
+          sum += itemList[key].count * itemList[key].promotionPrice;
+        }
+      }
+      return sum.toFixed(2);
+    });
+    return { totalNumber, totalPrice };
   },
 };
 </script>
