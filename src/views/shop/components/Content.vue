@@ -30,7 +30,7 @@
                 v-show="cartData?.[shopId]?.[item.id]?.['count']"
                 @click="
                   () => {
-                    changeItem2cart(shopId, item.id, -1);
+                    changeItem2cart(shopId, item.id, item, -1);
                   }
                 "
               >
@@ -43,7 +43,7 @@
                 class="shop-content__list__item__desc__count__plus"
                 @click="
                   () => {
-                    changeItem2cart(shopId, item.id, 1);
+                    changeItem2cart(shopId, item.id, item, 1);
                   }
                 "
               >
@@ -96,8 +96,8 @@ const shopListEffect = (currentNavName) => {
 const cartEffect = () => {
   const store = useStore();
   const { cartData } = toRefs(store.state);
-  const changeItem2cart = (shopId, itemId, num) => {
-    store.commit("changeItem2cart", { shopId, itemId, num });
+  const changeItem2cart = (shopId, itemId, itemInfo, num) => {
+    store.commit("changeItem2cart", { shopId, itemId, itemInfo, num });
   };
   return { cartData, changeItem2cart };
 };

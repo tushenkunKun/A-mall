@@ -3,6 +3,15 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     cartData: {
+      /* shopId:{
+        itemId:{
+          itemInfo
+        }
+        itemId:{
+          itemInfo
+        }
+      }
+      */
       // 1: {
       // 	1: {
       // 		count: 0,
@@ -22,15 +31,21 @@ export default createStore({
   getters: {},
   mutations: {
     changeItem2cart(state, payload) {
-      const { shopId, itemId, num } = payload;
+      const { shopId, itemId,itemInfo, num } = payload;
       // 判断是否有shopId
       const shopInfo = state.cartData[shopId] || {};
       // 判断是否有itemId
-      const itemInfo = shopInfo[itemId] || { count: 0 };
-      // 数量加1
-      itemInfo.count += num;
-      // 把itemInfo加入到shopInfo中
-      shopInfo[itemId] = itemInfo;
+      let item = null;
+      if (shopInfo[itemId]) {
+        item = shopInfo[itemId];
+      } else {
+        item = itemInfo;
+        item.count = 0;
+      }
+      // 数量改变
+      item.count += num;
+      // 把item加入到shopInfo中
+      shopInfo[itemId] = item;
       // 把shopInfo加入到cartData中
       state.cartData[shopId] = shopInfo;
     },
