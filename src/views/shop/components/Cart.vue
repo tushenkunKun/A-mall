@@ -149,6 +149,15 @@ export default {
         font-size: 19rem;
         margin-right: 9rem;
         color: #0091ff;
+        &__label {
+          display: block;
+          width: 20rem;
+          height: 20rem;
+          border: 1px solid black;
+        }
+        &__input {
+          display: none;
+        }
       }
       &__text {
         font-family: PingFangSC-Regular;
