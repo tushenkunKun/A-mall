@@ -1,13 +1,17 @@
 <template>
   <div class="cart">
     <div class="cart__detail">
-    <div class="cart__detail-header">
-      <div class="cart__detail-header__select">
-        <span class="cart__detail-header__select__icon">&#xe6f7;</span>
-        <span class="cart__detail-header__select__text">全选</span>
+      <div class="cart__detail-header">
+        <div class="cart__detail-header__select">
+          <!-- <span class="cart__detail-header__select__icon">&#xe6f7;</span> -->
+          <span class="cart__detail-header__select__icon">
+            <label class="cart__detail-header__select__icon__label" for="demo"></label>
+            <input class="cart__detail-header__select__icon__input" type="checkbox" id="demo" />
+          </span>
+          <span class="cart__detail-header__select__text">全选</span>
+        </div>
+        <div class="cart__detail-header__clear">清空购物车</div>
       </div>
-      <div class="cart__detail-header__clear">清空购物车</div>
-    </div>
       <div class="cart__detail__item" v-for="item of cartList" :key="item.id">
         <span class="cart__detail__item__select">&#xe6f7;</span>
         <div class="cart__detail__item__img">
@@ -174,7 +178,7 @@ export default {
       align-items: center;
       margin: 0 18rem 12rem 16rem;
       border-bottom: 1rem solid #f1f1f1;
-      &__select{
+      &__select {
         font-size: 19rem;
         margin-right: 9rem;
         color: #0091ff;
