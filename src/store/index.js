@@ -35,7 +35,6 @@ export default createStore({
      */
     changeItem2cart(state, payload) {
       const { shopId, itemId,itemInfo, num } = payload;
-      console.log(state.cartData[shopId]);
       // 判断是否有shopId（判断vuex中是否有点进来的店铺）
       const shopInfo = state.cartData[shopId] || {};
       // 判断是否有itemId（判断vuex中这个店铺有没有点到的商品）
@@ -49,10 +48,20 @@ export default createStore({
       // 数量改变
       item.count += num;
       /* 如果商品数量为0，将商品信息shopInfo[itemId]移除 */
-      // 把item加入到shopInfo中
-      shopInfo[itemId] = item;
-      // 把shopInfo加入到cartData中
-      state.cartData[shopId] = shopInfo;
+      if (item.count===0) {
+        delete shopInfo[itemId]
+      } else {
+        // 把item加入到shopInfo中
+        shopInfo[itemId] = item
+      }
+      console.log(state.cartData[shopId]);
+      // 判断店铺下的购物车是否为空，满足就把shopInfo加入到cartData中
+      if (JSON.stringify(shopInfo)!=='{}') {
+        state.cartData[shopId] = shopInfo;
+      } else {
+        // 否则清除店铺信息
+        delete state.cartData[shopId]
+      }
     },
   },
   actions: {},
