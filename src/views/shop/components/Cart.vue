@@ -1,5 +1,47 @@
 <template>
   <div class="cart">
+    <div class="cart__detail">
+      <div class="cart__detail__item" v-for="item of cartList" :key="item.id">
+        <div class="cart__detail__item__img">
+          <img :src="item.imgUrl" alt="" />
+        </div>
+        <div class="cart__detail__item__desc">
+          <div class="cart__detail__item__desc__weight">{{ item.weight }}</div>
+          <div class="cart__detail__item__desc__price">
+            <div class="cart__detail__item__desc__price__unit-price">
+              <div class="cart__detail__item__desc__price__unit-price__promotion-price">¥{{ item.promotionPrice }}</div>
+              <div class="cart__detail__item__desc__price__unit-price__original-price">¥{{ item.originalPrice }}</div>
+            </div>
+            <div class="cart__detail__item__desc__count">
+              <button
+                class="cart__detail__item__desc__count__minus"
+                v-show="cartData?.[shopId]?.[item.id]?.['count']"
+                @click="
+                  () => {
+                    changeItem2cart(shopId, item.id, item, -1);
+                  }
+                "
+              >
+                &#xe780;
+              </button>
+              <span class="cart__detail__item__desc__count__number" v-show="cartData?.[shopId]?.[item.id]?.['count']">
+                {{ cartData?.[shopId]?.[item.id]?.["count"] }}
+              </span>
+              <button
+                class="cart__detail__item__desc__count__plus"
+                @click="
+                  () => {
+                    changeItem2cart(shopId, item.id, item, 1);
+                  }
+                "
+              >
+                &#xe7e0;
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="cart__info">
       <div class="cart__info__icon">
         <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261637089.png" alt="" />
@@ -10,17 +52,15 @@
         <span class="cart__info__count__total-price">¥ {{ totalPrice }}</span>
       </div>
     </div>
-    <div class="cart__payment">去结算</div>
+      <div class="cart__payment">去结算</div>
   </div>
 </template>
 <script>
 import { computed } from "@vue/runtime-core";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-export default {
-  name: "Cart",
-  setup() {
-    const route = useRoute();
+const cartEffect = ()=>{
+  const route = useRoute();
     const store = useStore();
     // 获取店铺的id
     const shopId = route.params.id;
@@ -39,7 +79,7 @@ export default {
       }
       return count;
     });
-    // 定义计算属性totalNumber,  计算总价
+    // 定义计算属性totalPrice,  计算总价
     const totalPrice = computed(() => {
       // 获取此店铺id下的所有商品
       const itemList = cartData[shopId];
@@ -53,7 +93,18 @@ export default {
       }
       return sum.toFixed(2);
     });
-    return { totalNumber, totalPrice };
+    // 定义计算属性cartList,  购物车列表
+    const cartList = computed(() => {
+      const cartListItems = cartData[shopId] || [];
+      return cartListItems;
+    });
+    return { totalNumber, totalPrice, cartList }
+}
+export default {
+  name: "Cart",
+  setup() {
+    const { totalNumber, totalPrice, cartList } = cartEffect();
+    return { totalNumber, totalPrice, cartList };
   },
 };
 </script>
@@ -68,6 +119,92 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  &__detail {
+    // overflow-y: auto;
+    // flex-grow: 1;
+    background-color: #fff;
+    position: fixed;
+    bottom: 49rem;
+    width: 375rem;
+    left: 0;
+    &__item {
+      display: flex;
+      margin: 0 18rem 12rem 16rem;
+      border-bottom: 1rem solid #f1f1f1;
+      &__img {
+        margin-right: 16rem;
+        margin-bottom: 12rem;
+        & img {
+          width: 68rem;
+          height: 68rem;
+        }
+      }
+      &__desc {
+        flex-grow: 1;
+        &__weight {
+          font-family: PingFangSC-Medium;
+          font-size: 14rem;
+          color: #333333;
+          margin-bottom: 8rem;
+        }
+        &__sale-num {
+          font-family: PingFangSC-Regular;
+          font-size: 12rem;
+          color: #333333;
+          line-height: 16rem;
+          margin-bottom: 8rem;
+        }
+        &__price {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          &__unit-price {
+            display: flex;
+            &__promotion-price {
+              font-family: PingFangSC-Semibold;
+              font-size: 14rem;
+              color: #e93b3b;
+              line-height: 20rem;
+              margin-right: 10rem;
+              &::first-letter {
+                font-size: 12rem;
+              }
+            }
+            &__original-price {
+              font-family: PingFangSC-Regular;
+              font-size: 10rem;
+              color: #999;
+              line-height: 20rem;
+              &::first-letter {
+                font-size: 12rem;
+              }
+            }
+          }
+        }
+        &__count {
+          display: flex;
+          align-items: center;
+          &__minus {
+            color: #666666;
+            font-size: 20rem;
+            background: none;
+          }
+          &__number {
+            font-family: PingFangSC-Regular;
+            font-size: 14rem;
+            color: #333333;
+            margin-left: 6rem;
+            margin-right: 6rem;
+          }
+          &__plus {
+            font-size: 17rem;
+            color: #0091ff;
+            background: none;
+          }
+        }
+      }
+    }
+  }
   &__info {
     display: flex;
     align-items: center;

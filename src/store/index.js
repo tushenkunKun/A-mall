@@ -54,7 +54,6 @@ export default createStore({
         // 把item加入到shopInfo中
         shopInfo[itemId] = item
       }
-      console.log(state.cartData[shopId]);
       // 判断店铺下的购物车是否为空，满足就把shopInfo加入到cartData中
       if (JSON.stringify(shopInfo)!=='{}') {
         state.cartData[shopId] = shopInfo;

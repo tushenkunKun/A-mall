@@ -93,7 +93,7 @@ const shopListEffect = (currentNavName) => {
   return { shopList, shopId };
 };
 /* ---------------------------商品增减个数的功能逻辑 */
-const cartEffect = () => {
+const shop2cartEffect = () => {
   const store = useStore();
   const { cartData } = toRefs(store.state);
   /* shopId-->店铺id
@@ -109,7 +109,7 @@ const cartEffect = () => {
 export default {
   name: "ShopContent",
   setup() {
-    const { cartData, changeItem2cart } = cartEffect();
+    const { cartData, changeItem2cart } = shop2cartEffect();
     const { currentNavName, checkedNav } = shopNavEffect();
     const { shopList, shopId } = shopListEffect(currentNavName);
     return { shopNav, currentNavName, shopList, checkedNav, cartData, shopId, changeItem2cart };
