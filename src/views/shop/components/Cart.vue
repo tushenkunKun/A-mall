@@ -7,7 +7,7 @@
           <span class="cart__detail-header__select__icon-unchecked">&#xe619;</span>
           <span class="cart__detail-header__select__text">全选</span>
         </div>
-        <div class="cart__detail-header__clear">清空购物车</div>
+        <div class="cart__detail-header__clear" @click="clearCart(shopId)">清空购物车</div>
       </div>
       <div class="cart__detail__item" v-for="item of cartList" :key="item.id">
         <!--绑定事件的两种写法 -->
@@ -70,7 +70,7 @@
 import { computed } from "@vue/runtime-core";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { shop2cartEffect,changeItemChecked } from "../commonCartEffect.js";
+import { shop2cartEffect } from "../commonCartEffect.js";
 const cartEffect = () => {
   const route = useRoute();
   const store = useStore();
@@ -117,9 +117,9 @@ const cartEffect = () => {
 export default {
   name: "Cart",
   setup() {
-    const { cartData, changeItem2cart, changeItemChecked } = shop2cartEffect();
+    const { cartData, changeItem2cart, changeItemChecked, clearCart } = shop2cartEffect();
     const { totalNumber, totalPrice, cartList, shopId } = cartEffect();
-    return { totalNumber, totalPrice, cartList, shopId, cartData, changeItem2cart,changeItemChecked };
+    return { totalNumber, totalPrice, cartList, shopId, cartData, changeItem2cart,changeItemChecked, clearCart };
   },
 };
 </script>

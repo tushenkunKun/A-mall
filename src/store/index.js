@@ -69,6 +69,10 @@ export default createStore({
       const item = state.cartData[shopId][itemId];
       item.checked = !item.checked;
     },
+    clearCart(state, payload) {
+      const { shopId } = payload;
+      state.cartData[shopId]={};
+    },
   },
   actions: {},
   modules: {},

@@ -18,5 +18,9 @@ export const shop2cartEffect = () => {
   const changeItemChecked = (shopId, itemId) => {
     store.commit("changeItemChecked", { shopId, itemId });
   };
-  return { cartData, changeItem2cart, changeItemChecked };
+  // 清空购物车
+  const clearCart = (shopId) => {
+    store.commit("clearCart", { shopId });
+  };
+  return { cartData, changeItem2cart, changeItemChecked, clearCart };
 };
