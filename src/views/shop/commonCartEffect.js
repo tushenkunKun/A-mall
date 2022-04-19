@@ -10,8 +10,13 @@ export const shop2cartEffect = () => {
      itemInfo-->店铺id下的商品的各种信息（从接口拿到的）
      num-->判断是加还是减
   */
+  // 将商品添加到购物车
   const changeItem2cart = (shopId, itemId, itemInfo, num) => {
     store.commit("changeItem2cart", { shopId, itemId, itemInfo, num });
   };
-  return { cartData, changeItem2cart };
+  // 改变购物车中商品的checked状态
+  const changeItemChecked = (shopId, itemId) => {
+    store.commit("changeItemChecked", { shopId, itemId });
+  };
+  return { cartData, changeItem2cart, changeItemChecked };
 };

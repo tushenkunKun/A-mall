@@ -3,17 +3,16 @@
     <div class="cart__detail">
       <div class="cart__detail-header">
         <div class="cart__detail-header__select">
-          <!-- <span class="cart__detail-header__select__icon">&#xe6f7;</span> -->
-          <span class="cart__detail-header__select__icon">
-            <label class="cart__detail-header__select__icon__label" for="demo"></label>
-            <input class="cart__detail-header__select__icon__input" type="checkbox" id="demo" />
-          </span>
+          <span class="cart__detail-header__select__icon-checked">&#xe6f7;</span>
+          <span class="cart__detail-header__select__icon-unchecked">&#xe619;</span>
           <span class="cart__detail-header__select__text">全选</span>
         </div>
         <div class="cart__detail-header__clear">清空购物车</div>
       </div>
       <div class="cart__detail__item" v-for="item of cartList" :key="item.id">
-        <span class="cart__detail__item__select">&#xe6f7;</span>
+        <!--绑定事件的两种写法 -->
+        <span class="cart__detail__item__select__icon-checked" v-if="item.checked" @click="changeItemChecked(shopId,item.id)">&#xe6f7;</span>
+        <span class="cart__detail__item__select__icon-unchecked" v-else @click="()=>{changeItemChecked(shopId,item.id)}">&#xe619;</span>
         <div class="cart__detail__item__img">
           <img :src="item.imgUrl" alt="" />
         </div>
@@ -71,7 +70,7 @@
 import { computed } from "@vue/runtime-core";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { shop2cartEffect } from "../commonCartEffect.js";
+import { shop2cartEffect,changeItemChecked } from "../commonCartEffect.js";
 const cartEffect = () => {
   const route = useRoute();
   const store = useStore();
@@ -101,7 +100,9 @@ const cartEffect = () => {
     /* 如果有数量记录，就计算，没有就直接返回 */
     if (itemList) {
       for (const key in itemList) {
-        sum += itemList[key].count * itemList[key].promotionPrice;
+        if (itemList[key].checked) {
+          sum += itemList[key].count * itemList[key].promotionPrice;
+        }
       }
     }
     return sum.toFixed(2);
@@ -116,9 +117,9 @@ const cartEffect = () => {
 export default {
   name: "Cart",
   setup() {
-    const { cartData, changeItem2cart } = shop2cartEffect();
+    const { cartData, changeItem2cart, changeItemChecked } = shop2cartEffect();
     const { totalNumber, totalPrice, cartList, shopId } = cartEffect();
-    return { totalNumber, totalPrice, cartList, shopId, cartData, changeItem2cart };
+    return { totalNumber, totalPrice, cartList, shopId, cartData, changeItem2cart,changeItemChecked };
   },
 };
 </script>
@@ -145,19 +146,14 @@ export default {
     &__select {
       display: flex;
       align-items: center;
-      &__icon {
+      &__icon-checked {
         font-size: 19rem;
         margin-right: 9rem;
         color: #0091ff;
-        &__label {
-          display: block;
-          width: 20rem;
-          height: 20rem;
-          border: 1px solid black;
-        }
-        &__input {
-          display: none;
-        }
+      }
+      &__icon-unchecked {
+        font-size: 19rem;
+        margin-right: 9rem;
       }
       &__text {
         font-family: PingFangSC-Regular;
@@ -188,9 +184,15 @@ export default {
       margin: 0 18rem 12rem 16rem;
       border-bottom: 1rem solid #f1f1f1;
       &__select {
-        font-size: 19rem;
-        margin-right: 9rem;
-        color: #0091ff;
+        &__icon-checked {
+          font-size: 19rem;
+          margin-right: 9rem;
+          color: #0091ff;
+        }
+        &__icon-unchecked {
+          font-size: 19rem;
+          margin-right: 9rem;
+        }
       }
       &__img {
         margin-right: 16rem;
