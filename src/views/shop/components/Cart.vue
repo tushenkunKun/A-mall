@@ -1,6 +1,9 @@
 <template>
+  <!-- 购物车蒙层 -->
+  <div class="mask"></div>
+  <!-- 购物车主体内容 -->
   <div class="cart">
-    <div class="cart__detail">
+    <div class="cart__detail" v-if="cartShow && JSON.stringify(cartList) !== '{}'">
       <div class="cart__detail-header">
         <div class="cart__detail-header__select">
           <span class="cart__detail-header__select__icon-checked" v-if="allChecked" @click="setAllChecked(shopId)">&#xe6f7;</span>
@@ -64,7 +67,7 @@
       </div>
     </div>
     <div class="cart__info">
-      <div class="cart__info__icon">
+      <div class="cart__info__icon" @click="cartShowChange(cartList)">
         <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261637089.png" alt="" />
         <span class="cart__info__icon__number">{{ totalNumber }}</span>
       </div>
@@ -77,11 +80,23 @@
   </div>
 </template>
 <script>
-import { computed } from "@vue/runtime-core";
+import { computed, ref } from "@vue/runtime-core";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { shop2cartEffect } from "../commonCartEffect.js";
-const cartEffect = () => {
+const cartShowEffect = () => {
+  let cartShow = ref(false);
+  const cartShowChange = (cartList) => {
+    cartShow.value = !cartShow.value;
+  };
+  return { cartShow, cartShowChange };
+};
+const cartEffect = (cartShow) => {
+  /**
+   * shopId--》店铺id
+   * cartData--》vuex中的购物车数据
+   * cartListItems--》vuex中店铺id下的商品
+   */
   const route = useRoute();
   const store = useStore();
   // 获取店铺的id
@@ -119,7 +134,10 @@ const cartEffect = () => {
   });
   // 定义计算属性cartList,  购物车列表
   const cartList = computed(() => {
-    const cartListItems = cartData[shopId] || [];
+    const cartListItems = cartData[shopId] || {};
+    if (JSON.stringify(cartListItems)==='{}') {
+      cartShow.value = false;
+    }
     return cartListItems;
   });
   // 定义计算属性allChecked, 购物车全选
@@ -144,8 +162,9 @@ export default {
   name: "Cart",
   setup() {
     const { cartData, changeItem2cart, changeItemChecked, clearCart, setAllChecked } = shop2cartEffect();
-    const { totalNumber, totalPrice, cartList, allChecked, shopId } = cartEffect();
-    return { totalNumber, totalPrice, cartList, allChecked, shopId, cartData, changeItem2cart, changeItemChecked, clearCart, setAllChecked };
+    const { cartShow, cartShowChange } = cartShowEffect();
+    const { totalNumber, totalPrice, cartList, allChecked, shopId } = cartEffect(cartShow);
+    return { totalNumber, totalPrice, cartList, allChecked, shopId, cartData, cartShow, changeItem2cart, changeItemChecked, clearCart, setAllChecked, cartShowChange };
   },
 };
 </script>
