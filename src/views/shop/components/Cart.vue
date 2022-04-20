@@ -1,6 +1,6 @@
 <template>
   <!-- 购物车蒙层 -->
-  <div class="mask"></div>
+  <div class="mask" v-if="cartShow && JSON.stringify(cartList) !== '{}'" @click="cartShowChange(cartList)"></div>
   <!-- 购物车主体内容 -->
   <div class="cart">
     <div class="cart__detail" v-if="cartShow && JSON.stringify(cartList) !== '{}'">
@@ -169,6 +169,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.mask{
+  position: fixed;
+  background-color: rgba(0,0,0,.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 49rem;
+}
 .cart {
   position: fixed;
   left: 0;
