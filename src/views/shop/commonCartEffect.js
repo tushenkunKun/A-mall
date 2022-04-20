@@ -14,7 +14,7 @@ export const shop2cartEffect = () => {
   const changeItem2cart = (shopId, itemId, itemInfo, num) => {
     store.commit("changeItem2cart", { shopId, itemId, itemInfo, num });
   };
-  // 改变购物车中商品的checked状态
+  // 改变购物车中单个商品的checked状态
   const changeItemChecked = (shopId, itemId) => {
     store.commit("changeItemChecked", { shopId, itemId });
   };
@@ -22,5 +22,9 @@ export const shop2cartEffect = () => {
   const clearCart = (shopId) => {
     store.commit("clearCart", { shopId });
   };
-  return { cartData, changeItem2cart, changeItemChecked, clearCart };
+  // 购物车全选按钮
+  const setAllChecked = (shopId) => {
+    store.commit("setAllChecked", { shopId });
+  };
+  return { cartData, changeItem2cart, changeItemChecked, clearCart, setAllChecked };
 };

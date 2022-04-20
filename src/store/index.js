@@ -33,6 +33,7 @@ export default createStore({
     /* shopInfo--》shopId对应的店铺
        item--》 店铺下itemId对应的商品信息
      */
+    // 购物车增删物品
     changeItem2cart(state, payload) {
       const { shopId, itemId, itemInfo, num } = payload;
       // 判断是否有shopId（判断vuex中是否有点进来的店铺）
@@ -64,14 +65,25 @@ export default createStore({
         delete state.cartData[shopId];
       }
     },
+    // 购物车中物品的单个选中或不选
     changeItemChecked(state, payload) {
       const { shopId, itemId } = payload;
       const item = state.cartData[shopId][itemId];
       item.checked = !item.checked;
     },
+    // 清空购物车
     clearCart(state, payload) {
       const { shopId } = payload;
       state.cartData[shopId]={};
+    },
+    // 购物车全选
+    setAllChecked(state, payload) {
+      const { shopId } = payload;
+      const shopInfo = state.cartData[shopId];
+      for (const key in shopInfo) {
+        const element = shopInfo[key];
+        element.checked = true;
+      }
     },
   },
   actions: {},

@@ -3,16 +3,26 @@
     <div class="cart__detail">
       <div class="cart__detail-header">
         <div class="cart__detail-header__select">
-          <span class="cart__detail-header__select__icon-checked">&#xe6f7;</span>
-          <span class="cart__detail-header__select__icon-unchecked">&#xe619;</span>
+          <span class="cart__detail-header__select__icon-checked" v-if="allChecked" @click="setAllChecked(shopId)">&#xe6f7;</span>
+          <span class="cart__detail-header__select__icon-unchecked" v-else @click="setAllChecked(shopId)">&#xe619;</span>
           <span class="cart__detail-header__select__text">全选</span>
         </div>
         <div class="cart__detail-header__clear" @click="clearCart(shopId)">清空购物车</div>
       </div>
       <div class="cart__detail__item" v-for="item of cartList" :key="item.id">
         <!--绑定事件的两种写法 -->
-        <span class="cart__detail__item__select__icon-checked" v-if="item.checked" @click="changeItemChecked(shopId,item.id)">&#xe6f7;</span>
-        <span class="cart__detail__item__select__icon-unchecked" v-else @click="()=>{changeItemChecked(shopId,item.id)}">&#xe619;</span>
+        <span class="cart__detail__item__select__icon-checked" v-if="item.checked" @click="changeItemChecked(shopId, item.id)">&#xe6f7;</span>
+        <span
+          class="cart__detail__item__select__icon-unchecked"
+          v-else
+          @click="
+            () => {
+              changeItemChecked(shopId, item.id);
+            }
+          "
+        >
+          &#xe619;
+        </span>
         <div class="cart__detail__item__img">
           <img :src="item.imgUrl" alt="" />
         </div>
@@ -112,14 +122,30 @@ const cartEffect = () => {
     const cartListItems = cartData[shopId] || [];
     return cartListItems;
   });
-  return { totalNumber, totalPrice, cartList, shopId };
+  // 定义计算属性allChecked, 购物车全选
+  const allChecked = computed(() => {
+    // 获取此店铺id下的所有商品
+    const itemList = cartData[shopId];
+    // 定义一个状态result=true, 表示默认为选中
+    let result = true;
+    if (itemList) {
+      for (const key in itemList) {
+        const element = itemList[key];
+        if (!element.checked) {
+          result = false;
+        }
+      }
+    }
+    return result;
+  });
+  return { totalNumber, totalPrice, cartList, allChecked, shopId };
 };
 export default {
   name: "Cart",
   setup() {
-    const { cartData, changeItem2cart, changeItemChecked, clearCart } = shop2cartEffect();
-    const { totalNumber, totalPrice, cartList, shopId } = cartEffect();
-    return { totalNumber, totalPrice, cartList, shopId, cartData, changeItem2cart,changeItemChecked, clearCart };
+    const { cartData, changeItem2cart, changeItemChecked, clearCart, setAllChecked } = shop2cartEffect();
+    const { totalNumber, totalPrice, cartList, allChecked, shopId } = cartEffect();
+    return { totalNumber, totalPrice, cartList, allChecked, shopId, cartData, changeItem2cart, changeItemChecked, clearCart, setAllChecked };
   },
 };
 </script>
