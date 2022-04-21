@@ -1,32 +1,36 @@
 import { createStore } from "vuex";
-
+// 把购物车信息放入缓存
+const setLocalCartData = (state) => {
+  const { cartData } = state;
+  const cartDataString = JSON.stringify(cartData);
+  localStorage.cartData = cartDataString;
+};
+// 从缓存中取出购物车信息
+const getLocalCartData = () => {
+  let result = {};
+  if (localStorage.cartData) {
+    result = JSON.parse(localStorage.cartData);
+  }
+  return result;
+};
 export default createStore({
   state: {
+    cartData: getLocalCartData(),
+    /* 下面是cartData的数据结构
     cartData: {
-      /* shopId:{
-        itemId:{
-          item
-        }
-        itemId:{
-          item
+      "shopId":{
+        "shopName":"",
+        "itemList":{
+          "itemId":{
+            item
+          }
+          itemId:{
+            item
+          }
         }
       }
-      */
-      // 1: {
-      // 	1: {
-      // 		count: 0,
-      // 	},
-      // 	2: {
-      // 		count: 1,
-      // 	},
-      // 	3: {
-      // 		count: 2,
-      // 	},
-      // 	4: {
-      // 		count: 3,
-      // 	},
-      // },
     },
+    */
   },
   getters: {},
   mutations: {
@@ -42,7 +46,7 @@ export default createStore({
         shopInfo = state.cartData[shopId];
       } else {
         shopInfo.shopName = shopName;
-        shopInfo.itemList = {}
+        shopInfo.itemList = {};
       }
       // 判断是否有itemId（判断vuex中这个店铺有没有点到的商品）
       let item = null;
@@ -70,17 +74,20 @@ export default createStore({
         // 否则清除店铺信息
         delete state.cartData[shopId];
       }
+      setLocalCartData(state);
     },
     // 购物车中物品的单个选中或不选
     changeItemChecked(state, payload) {
       const { shopId, itemId } = payload;
       const item = state.cartData[shopId].itemList[itemId];
       item.checked = !item.checked;
+      setLocalCartData(state);
     },
     // 清空购物车
     clearCart(state, payload) {
       const { shopId } = payload;
-      state.cartData[shopId].itemList={};
+      state.cartData[shopId].itemList = {};
+      setLocalCartData(state);
     },
     // 购物车全选
     setAllChecked(state, payload) {
@@ -90,6 +97,7 @@ export default createStore({
         const element = shopInfo.itemList[key];
         element.checked = true;
       }
+      setLocalCartData(state);
     },
   },
   actions: {},
