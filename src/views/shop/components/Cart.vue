@@ -39,23 +39,23 @@
             <div class="cart__detail__item__desc__count">
               <button
                 class="cart__detail__item__desc__count__minus"
-                v-show="cartData?.[shopId]?.[item.id]?.['count']"
+                v-show="cartData?.[shopId]?.itemList?.[item.id]?.['count']"
                 @click="
                   () => {
-                    changeItem2cart(shopId, item.id, item, -1);
+                    changeItem2cart(shopId, shopName, item.id, item, -1);
                   }
                 "
               >
                 &#xe780;
               </button>
-              <span class="cart__detail__item__desc__count__number" v-show="cartData?.[shopId]?.[item.id]?.['count']">
-                {{ cartData?.[shopId]?.[item.id]?.["count"] }}
+              <span class="cart__detail__item__desc__count__number" v-show="cartData?.[shopId]?.itemList?.[item.id]?.['count']">
+                {{ cartData?.[shopId]?.itemList?.[item.id]?.["count"] }}
               </span>
               <button
                 class="cart__detail__item__desc__count__plus"
                 @click="
                   () => {
-                    changeItem2cart(shopId, item.id, item, 1);
+                    changeItem2cart(shopId, shopName, item.id, item, 1);
                   }
                 "
               >
@@ -106,7 +106,7 @@ const cartEffect = (cartShow) => {
   // 定义计算属性totalNumber,  计算总量
   const totalNumber = computed(() => {
     // 获取此店铺id下的所有商品
-    const itemList = cartData[shopId];
+    const itemList = cartData[shopId]?.itemList || {};
     // 计算总量
     let count = 0;
     if (itemList) {
@@ -119,7 +119,7 @@ const cartEffect = (cartShow) => {
   // 定义计算属性totalPrice,  计算总价
   const totalPrice = computed(() => {
     // 获取此店铺id下的所有商品
-    const itemList = cartData[shopId];
+    const itemList = cartData[shopId]?.itemList || {};
     // 计算总价
     let sum = 0;
     /* 如果有数量记录，就计算，没有就直接返回 */
@@ -134,8 +134,8 @@ const cartEffect = (cartShow) => {
   });
   // 定义计算属性cartList,  购物车列表
   const cartList = computed(() => {
-    const cartListItems = cartData[shopId] || {};
-    if (JSON.stringify(cartListItems)==='{}') {
+    const cartListItems = cartData[shopId]?.itemList || {};
+    if (JSON.stringify(cartListItems) === "{}") {
       cartShow.value = false;
     }
     return cartListItems;
@@ -143,7 +143,7 @@ const cartEffect = (cartShow) => {
   // 定义计算属性allChecked, 购物车全选
   const allChecked = computed(() => {
     // 获取此店铺id下的所有商品
-    const itemList = cartData[shopId];
+    const itemList = cartData[shopId]?.itemList || {};
     // 定义一个状态result=true, 表示默认为选中
     let result = true;
     if (itemList) {
@@ -160,6 +160,7 @@ const cartEffect = (cartShow) => {
 };
 export default {
   name: "Cart",
+  props:['shopName'],
   setup() {
     const { cartData, changeItem2cart, changeItemChecked, clearCart, setAllChecked } = shop2cartEffect();
     const { cartShow, cartShowChange } = cartShowEffect();
@@ -169,9 +170,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.mask{
+.mask {
   position: fixed;
-  background-color: rgba(0,0,0,.5);
+  background-color: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;
   right: 0;

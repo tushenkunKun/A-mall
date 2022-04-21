@@ -35,13 +35,19 @@ export default createStore({
      */
     // 购物车增删物品
     changeItem2cart(state, payload) {
-      const { shopId, itemId, itemInfo, num } = payload;
+      const { shopId, shopName, itemId, itemInfo, num } = payload;
       // 判断是否有shopId（判断vuex中是否有点进来的店铺）
-      const shopInfo = state.cartData[shopId] || {};
+      let shopInfo = {};
+      if (state.cartData[shopId]) {
+        shopInfo = state.cartData[shopId];
+      } else {
+        shopInfo.shopName = shopName;
+        shopInfo.itemList = {}
+      }
       // 判断是否有itemId（判断vuex中这个店铺有没有点到的商品）
       let item = null;
-      if (shopInfo[itemId]) {
-        item = shopInfo[itemId];
+      if (shopInfo.itemList[itemId]) {
+        item = shopInfo.itemList[itemId];
       } else {
         item = itemInfo;
         item.count = 0;
@@ -50,15 +56,15 @@ export default createStore({
       item.count += num;
       /* 如果商品数量为0，将商品信息shopInfo[itemId]移除 */
       if (item.count === 0) {
-        delete shopInfo[itemId];
+        delete shopInfo.itemList[itemId];
       } else {
         // 把勾选状态改为true
         item.checked = true;
         // 把item加入到shopInfo中
-        shopInfo[itemId] = item;
+        shopInfo.itemList[itemId] = item;
       }
       // 判断店铺下的购物车是否为空，满足就把shopInfo加入到cartData中
-      if (JSON.stringify(shopInfo) !== "{}") {
+      if (JSON.stringify(shopInfo.itemList) !== "{}") {
         state.cartData[shopId] = shopInfo;
       } else {
         // 否则清除店铺信息
@@ -68,20 +74,20 @@ export default createStore({
     // 购物车中物品的单个选中或不选
     changeItemChecked(state, payload) {
       const { shopId, itemId } = payload;
-      const item = state.cartData[shopId][itemId];
+      const item = state.cartData[shopId].itemList[itemId];
       item.checked = !item.checked;
     },
     // 清空购物车
     clearCart(state, payload) {
       const { shopId } = payload;
-      state.cartData[shopId]={};
+      state.cartData[shopId].itemList={};
     },
     // 购物车全选
     setAllChecked(state, payload) {
       const { shopId } = payload;
       const shopInfo = state.cartData[shopId];
-      for (const key in shopInfo) {
-        const element = shopInfo[key];
+      for (const key in shopInfo.itemList) {
+        const element = shopInfo.itemList[key];
         element.checked = true;
       }
     },

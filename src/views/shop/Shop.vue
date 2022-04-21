@@ -10,8 +10,8 @@
       </div>
     </div>
     <ShopInfo :dealerInfo="item" :showBorder="false" v-if="item.imgUrl"/>
-    <ShopContent />
-    <Cart />
+    <ShopContent :shopName="item.dealer" />
+    <Cart :shopName="item.dealer" />
   </div>
 </template>
 <script>

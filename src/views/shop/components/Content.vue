@@ -27,23 +27,23 @@
             <div class="shop-content__list__item__desc__count">
               <button
                 class="shop-content__list__item__desc__count__minus"
-                v-show="cartData?.[shopId]?.[item.id]?.['count']"
+                v-show="cartData?.[shopId]?.itemList?.[item.id]?.['count']"
                 @click="
                   () => {
-                    changeItem2cart(shopId, item.id, item, -1);
+                    changeItem2cart(shopId, shopName, item.id, item, -1);
                   }
                 "
               >
                 &#xe780;
               </button>
-              <span class="shop-content__list__item__desc__count__number" v-show="cartData?.[shopId]?.[item.id]?.['count']">
-                {{ cartData?.[shopId]?.[item.id]?.["count"] }}
+              <span class="shop-content__list__item__desc__count__number" v-show="cartData?.[shopId]?.itemList?.[item.id]?.['count']">
+                {{ cartData?.[shopId]?.itemList?.[item.id]?.["count"] }}
               </span>
               <button
                 class="shop-content__list__item__desc__count__plus"
                 @click="
                   () => {
-                    changeItem2cart(shopId, item.id, item, 1);
+                    changeItem2cart(shopId, shopName, item.id, item, 1);
                   }
                 "
               >
@@ -95,6 +95,7 @@ const shopListEffect = (currentNavName) => {
 
 export default {
   name: "ShopContent",
+  props: ['shopName'],
   setup() {
     const { cartData, changeItem2cart } = shop2cartEffect();
     const { currentNavName, checkedNav } = shopNavEffect();
