@@ -76,7 +76,9 @@
         <span class="cart__info__count__total-price">¥ {{ totalPrice }}</span>
       </div>
     </div>
-    <div class="cart__payment">去结算</div>
+    <router-link :to="{ path: `/order-confirmation/${shopId}` }">
+      <div class="cart__payment">去结算</div>
+    </router-link>
   </div>
 </template>
 <script>
@@ -160,7 +162,7 @@ const cartEffect = (cartShow) => {
 };
 export default {
   name: "Cart",
-  props:['shopName'],
+  props: ["shopName"],
   setup() {
     const { cartData, changeItem2cart, changeItemChecked, clearCart, setAllChecked } = shop2cartEffect();
     const { cartShow, cartShowChange } = cartShowEffect();

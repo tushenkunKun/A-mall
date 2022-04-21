@@ -39,6 +39,11 @@ const routes = [
     path:'/shop/:id',
     name:'Shop',
     component:()=>import("../views/shop/Shop.vue")
+  },
+  {
+    path:'/order-confirmation/:shopId',
+    name:'OrderConfirmation',
+    component:()=>import("../views/order/OrderConfirmation.vue")
   }
 ];
 
