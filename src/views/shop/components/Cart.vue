@@ -85,7 +85,7 @@
 import { computed, ref } from "@vue/runtime-core";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { shop2cartEffect } from "../commonCartEffect.js";
+import { shop2cartEffect } from "../../../components/commonCartEffect.js";
 const cartShowEffect = () => {
   let cartShow = ref(false);
   const cartShowChange = (cartList) => {

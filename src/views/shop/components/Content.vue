@@ -60,7 +60,7 @@
 import { ref, watchEffect, toRefs } from "vue";
 import { get } from "@/utils/request";
 import { useRoute } from "vue-router";
-import { shop2cartEffect } from "../commonCartEffect.js";
+import { shop2cartEffect } from "../../../components/commonCartEffect.js";
 // 定义变量
 const shopNav = [
   { name: "all", text: "全部商品" },
