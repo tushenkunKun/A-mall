@@ -18,17 +18,35 @@
     <div class="order__detail">
       <div class="order__detail__shop-name">{{ shopName }}</div>
       <div class="order__detail__cart-list">
-        <div class="order__detail__cart-list__item" v-for="item of cartList" :key="item.id">
+        <div class="order__detail__cart-list__item" v-for="item of Object.keys(cartList).slice(0, 2)" :key="item.id">
           <div class="order__detail__cart-list__item__image">
-            <img :src="item.imgUrl" alt="" />
+            <img :src="cartList[item].imgUrl" alt="" />
           </div>
           <div class="order__detail__cart-list__item__info">
-            <div class="order__detail__cart-list__item__info__weight">{{ item.weight }}</div>
+            <div class="order__detail__cart-list__item__info__weight">{{ cartList[item].weight }}</div>
             <div class="order__detail__cart-list__item__info__price">
-              <span class="order__detail__cart-list__item__info__price__unitprice">¥{{ item.promotionPrice }} x {{ item.count }}</span>
-              <span class="order__detail__cart-list__item__info__price__totalprice">¥{{ (item.promotionPrice * item.count).toFixed(2) }}</span>
+              <span class="order__detail__cart-list__item__info__price__unitprice">¥{{ cartList[item].promotionPrice }} x {{ cartList[item].count }}</span>
+              <span class="order__detail__cart-list__item__info__price__totalprice">¥{{ (cartList[item].promotionPrice * cartList[item].count).toFixed(2) }}</span>
             </div>
           </div>
+        </div>
+        <template v-if="!showMore">
+          <div class="order__detail__cart-list__item" v-for="item of Object.keys(cartList).slice(2)" :key="item.id">
+            <div class="order__detail__cart-list__item__image">
+              <img :src="cartList[item].imgUrl" alt="" />
+            </div>
+            <div class="order__detail__cart-list__item__info">
+              <div class="order__detail__cart-list__item__info__weight">{{ cartList[item].weight }}</div>
+              <div class="order__detail__cart-list__item__info__price">
+                <span class="order__detail__cart-list__item__info__price__unitprice">¥{{ cartList[item].promotionPrice }} x {{ cartList[item].count }}</span>
+                <span class="order__detail__cart-list__item__info__price__totalprice">¥{{ (cartList[item].promotionPrice * cartList[item].count).toFixed(2) }}</span>
+              </div>
+            </div>
+          </div>
+        </template>
+        <div class="order__detail__cart-list__more" @click="showMoreClick" v-if="showMore && Object.keys(cartList).length > 2">
+          共计商品{{ Object.keys(cartList).length }}种/{{ totalNumber }}件
+          <span class="order__detail__cart-list__more__icon">&#xe6b9;</span>
         </div>
       </div>
     </div>
@@ -45,6 +63,7 @@
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { back2prevPage } from "@/effects/backEffect";
+import { ref } from "@vue/reactivity";
 
 const orderEffect = () => {
   const store = useStore();
@@ -57,20 +76,31 @@ const orderEffect = () => {
   const shopName = cartData[shopId].shopName;
   // 获取购物车商品列表
   const cartList = cartData[shopId].itemList;
-  // 计算总价
+  // 计算总价和总量
   let totalPrice = 0;
+  let totalNumber = 0;
   for (const key in cartList) {
     const element = cartList[key];
     totalPrice += element.count * element.promotionPrice;
+    totalNumber += element.count;
   }
-  return { shopName, cartList, totalPrice };
+  totalPrice = totalPrice.toFixed(2);
+  return { shopName, cartList, totalPrice, totalNumber };
+};
+const showMoreEffect = () => {
+  const showMore = ref(true);
+  const showMoreClick = () => {
+    showMore.value = false;
+  };
+  return { showMore, showMoreClick };
 };
 export default {
   name: "OrderConfirmation",
   setup() {
     const { back } = back2prevPage();
-    const { shopName, cartList, totalPrice } = orderEffect();
-    return { shopName, cartList, totalPrice, back };
+    const { shopName, cartList, totalPrice, totalNumber } = orderEffect();
+    const { showMore, showMoreClick } = showMoreEffect();
+    return { shopName, cartList, totalPrice, totalNumber, showMore, back, showMoreClick };
   },
 };
 </script>
@@ -153,6 +183,8 @@ export default {
     top: -58rem;
     padding: 16rem 16rem 6rem 16rem;
     box-sizing: border-box;
+    max-height: 400rem;
+    overflow-y: auto;
     &__shop-name {
       font-family: PingFangSC-Medium;
       font-size: 16rem;
@@ -203,6 +235,17 @@ export default {
             }
           }
         }
+      }
+      &__more {
+        width: 307px;
+        height: 28px;
+        background: #f5f5f5;
+        margin: 0 auto;
+        font-size: 14px;
+        color: #999999;
+        line-height: 28px;
+        text-align: center;
+        margin-bottom: 12px;
       }
     }
   }
