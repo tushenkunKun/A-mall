@@ -80,7 +80,7 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { back2prevPage } from "@/effects/backEffect";
 import { ref } from "@vue/reactivity";
-
+/* 订单总价和总量的计算相关逻辑 */
 const orderEffect = () => {
   const store = useStore();
   const route = useRoute();
@@ -103,6 +103,7 @@ const orderEffect = () => {
   totalPrice = totalPrice.toFixed(2);
   return { shopName, cartList, totalPrice, totalNumber };
 };
+/* 购物车显示更多逻辑 */
 const showMoreEffect = () => {
   const showMore = ref(true);
   const showMoreClick = () => {
@@ -110,6 +111,7 @@ const showMoreEffect = () => {
   };
   return { showMore, showMoreClick };
 };
+/* 蒙层弹窗的相关逻辑 */
 const maskShowEffect = () => {
   // 蒙层默认关闭
   const maskShow = ref(false);
@@ -117,6 +119,10 @@ const maskShowEffect = () => {
   const warningPanelShow = ref(false);
   // 成功支付窗口默认关闭
   const successPanelShow = ref(false);
+  // 获取店铺的id，用于后面清空购物车方法
+  const store = useStore();
+  const route = useRoute();
+  const shopId = route.params.shopId;
   // 提交订单，出现蒙层
   const submitOrderClick = () => {
     maskShow.value = true;
@@ -140,6 +146,7 @@ const maskShowEffect = () => {
     maskShow.value = true;
     warningPanelShow.value = false;
     successPanelShow.value = true;
+    store.commit("clearCart", { shopId });
   };
   return { maskShow, successPanelShow, submitOrderClick, maskCloseClick, cancelOrderClick, confirmPayClick };
 };
