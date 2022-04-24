@@ -68,7 +68,7 @@
         </div>
       </div>
       <div class="order__mask__success" v-if="successPanelShow">
-        <div class="order__mask__success__close" @click="cancelOrderClick">&#xe8e7;</div>
+        <div class="order__mask__success__close" @click="maskCloseClick">&#xe8e7;</div>
         <div class="order__mask__success__icon">&#xe60a;</div>
         <div class="order__mask__success__text">支付成功，等待配送</div>
       </div>
@@ -76,7 +76,7 @@
   </div>
 </template>
 <script>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { back2prevPage } from "@/effects/backEffect";
 import { ref } from "@vue/reactivity";
@@ -122,6 +122,7 @@ const maskShowEffect = () => {
   // 获取店铺的id，用于后面清空购物车方法
   const store = useStore();
   const route = useRoute();
+  const router = useRouter();
   const shopId = route.params.shopId;
   // 提交订单，出现蒙层
   const submitOrderClick = () => {
@@ -133,7 +134,11 @@ const maskShowEffect = () => {
   const maskCloseClick = () => {
     maskShow.value = false;
     warningPanelShow.value = false;
-    successPanelShow.value = false;
+    // 如果提示支付成功，在点击蒙层后就将弹窗关闭，跳转到订单页面
+    if (successPanelShow.value) {
+      successPanelShow.value = false;
+      router.push({ name: "OrderList" });
+    }
   };
   // 点击取消订单按钮，蒙层关闭
   const cancelOrderClick = () => {
