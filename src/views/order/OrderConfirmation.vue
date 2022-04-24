@@ -25,12 +25,19 @@
           <div class="order__detail__cart-list__item__info">
             <div class="order__detail__cart-list__item__info__weight">{{ item.weight }}</div>
             <div class="order__detail__cart-list__item__info__price">
-              <span class="order__detail__cart-list__item__info__price__unitprice">¥{{ item.promotionPrice }} x {{ item.sales }}</span>
-              <span class="order__detail__cart-list__item__info__price__totalprice">¥{{ (item.promotionPrice * item.sales).toFixed(2) }}</span>
+              <span class="order__detail__cart-list__item__info__price__unitprice">¥{{ item.promotionPrice }} x {{ item.count }}</span>
+              <span class="order__detail__cart-list__item__info__price__totalprice">¥{{ (item.promotionPrice * item.count).toFixed(2) }}</span>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="order__usersubmit">
+      <div class="order__usersubmit__totalprice">
+        实付金额
+        <span>¥{{ totalPrice }}</span>
+      </div>
+      <div class="order__usersubmit__submit">提交订单</div>
     </div>
   </div>
 </template>
@@ -50,14 +57,20 @@ const orderEffect = () => {
   const shopName = cartData[shopId].shopName;
   // 获取购物车商品列表
   const cartList = cartData[shopId].itemList;
-  return { shopName, cartList };
+  // 计算总价
+  let totalPrice = 0;
+  for (const key in cartList) {
+    const element = cartList[key];
+    totalPrice += element.count * element.promotionPrice;
+  }
+  return { shopName, cartList, totalPrice };
 };
 export default {
   name: "OrderConfirmation",
   setup() {
     const { back } = back2prevPage();
-    const { shopName, cartList } = orderEffect();
-    return { shopName, cartList ,back };
+    const { shopName, cartList, totalPrice } = orderEffect();
+    return { shopName, cartList, totalPrice, back };
   },
 };
 </script>
@@ -191,6 +204,39 @@ export default {
           }
         }
       }
+    }
+  }
+  &__usersubmit {
+    display: flex;
+    justify-content: space-between;
+    width: 375rem;
+    height: 49rem;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background-color: #fff;
+    &__totalprice {
+      padding-left: 24rem;
+      box-sizing: border-box;
+      width: 277rem;
+      background-color: #fff;
+      font-family: PingFangSC-Regular;
+      font-size: 14rem;
+      color: #333333;
+      line-height: 49rem;
+      & span {
+        font-family: PingFangSC-Medium;
+        font-size: 16rem;
+      }
+    }
+    &__submit {
+      width: 98rem;
+      background-color: #4fb0f9;
+      font-family: PingFangSC-Medium;
+      font-size: 14rem;
+      color: #ffffff;
+      text-align: center;
+      line-height: 49rem;
     }
   }
 }
