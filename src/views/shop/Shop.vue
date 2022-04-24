@@ -9,7 +9,7 @@
         <input type="text" class="shop__header__search__input" placeholder="请输入商品名称搜索" />
       </div>
     </div>
-    <ShopInfo :dealerInfo="item" :showBorder="false" v-if="item.imgUrl"/>
+    <ShopInfo :dealerInfo="item" :showBorder="false" v-if="item.imgUrl" />
     <ShopContent :shopName="item.dealer" />
     <Cart :shopName="item.dealer" />
   </div>
@@ -21,6 +21,7 @@ import Cart from "@/views/shop/components/Cart.vue";
 import { useRoute, useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
 import { get } from "@/utils/request";
+import { back2prevPage } from "@/effects/backEffect";
 /* -------------------------通过接口获取点击的商铺的具体信息 */
 const dealerInfoEffect = () => {
   const item = ref({});
@@ -31,20 +32,13 @@ const dealerInfoEffect = () => {
   };
   return { item, getItemData };
 };
-/* -------------------------返回跳转之前的页面功能 */
-const back2prevPage = () => {
-  const router = useRouter();
-  const back = () => {
-    router.back();
-  };
-  return { back };
-};
+
 export default {
   name: "Shop",
-  components: { ShopInfo,ShopContent,Cart },
+  components: { ShopInfo, ShopContent, Cart },
   setup() {
     const { item, getItemData } = dealerInfoEffect();
-    const {back} = back2prevPage();
+    const { back } = back2prevPage();
     getItemData();
     return { item, back };
   },

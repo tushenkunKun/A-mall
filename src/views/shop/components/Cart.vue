@@ -76,7 +76,7 @@
         <span class="cart__info__count__total-price">¥ {{ totalPrice }}</span>
       </div>
     </div>
-    <router-link :to="{ path: `/order-confirmation/${shopId}` }">
+    <router-link :to="totalNumber ? { path: `/order-confirmation/${shopId}` } : ''">
       <div class="cart__payment">去结算</div>
     </router-link>
   </div>

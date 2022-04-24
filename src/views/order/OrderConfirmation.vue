@@ -1,7 +1,7 @@
 <template>
   <div class="order">
     <div class="order__header">
-      <span class="order__header__back-icon">&#xe624;</span>
+      <span class="order__header__back-icon" @click="back">&#xe624;</span>
       <span class="order__header__title">确认订单</span>
     </div>
     <div class="order__receiver">
@@ -16,29 +16,17 @@
       <div class="order__receiver__icon">&#xe665;</div>
     </div>
     <div class="order__detail">
-      <div class="order__detail__shop-name">沃尔玛</div>
+      <div class="order__detail__shop-name">{{ shopName }}</div>
       <div class="order__detail__cart-list">
-        <div class="order__detail__cart-list__item">
+        <div class="order__detail__cart-list__item" v-for="item of cartList" :key="item.id">
           <div class="order__detail__cart-list__item__image">
-            <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261527635.png" alt="" />
+            <img :src="item.imgUrl" alt="" />
           </div>
           <div class="order__detail__cart-list__item__info">
-            <div class="order__detail__cart-list__item__info__weight">番茄250g/份</div>
+            <div class="order__detail__cart-list__item__info__weight">{{ item.weight }}</div>
             <div class="order__detail__cart-list__item__info__price">
-              <span class="order__detail__cart-list__item__info__price__unitprice">¥33.3 x 3</span>
-              <span class="order__detail__cart-list__item__info__price__totalprice">¥99.9</span>
-            </div>
-          </div>
-        </div>
-        <div class="order__detail__cart-list__item">
-          <div class="order__detail__cart-list__item__image">
-            <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261527635.png" alt="" />
-          </div>
-          <div class="order__detail__cart-list__item__info">
-            <div class="order__detail__cart-list__item__info__weight">番茄250g/份</div>
-            <div class="order__detail__cart-list__item__info__price">
-              <span class="order__detail__cart-list__item__info__price__unitprice">¥33.3 x 3</span>
-              <span class="order__detail__cart-list__item__info__price__totalprice">¥99.9</span>
+              <span class="order__detail__cart-list__item__info__price__unitprice">¥{{ item.promotionPrice }} x {{ item.sales }}</span>
+              <span class="order__detail__cart-list__item__info__price__totalprice">¥{{ (item.promotionPrice * item.sales).toFixed(2) }}</span>
             </div>
           </div>
         </div>
@@ -47,10 +35,29 @@
   </div>
 </template>
 <script>
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+import { back2prevPage } from "@/effects/backEffect";
+
+const orderEffect = () => {
+  const store = useStore();
+  const route = useRoute();
+  // 获取店铺id
+  const shopId = route.params.shopId;
+  // 获取购物车数据
+  const cartData = store.state.cartData;
+  // 获取店铺名称
+  const shopName = cartData[shopId].shopName;
+  // 获取购物车商品列表
+  const cartList = cartData[shopId].itemList;
+  return { shopName, cartList };
+};
 export default {
   name: "OrderConfirmation",
   setup() {
-    return {};
+    const { back } = back2prevPage();
+    const { shopName, cartList } = orderEffect();
+    return { shopName, cartList ,back };
   },
 };
 </script>
