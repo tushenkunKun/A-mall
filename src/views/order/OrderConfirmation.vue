@@ -55,7 +55,23 @@
         实付金额
         <span>¥{{ totalPrice }}</span>
       </div>
-      <div class="order__usersubmit__submit">提交订单</div>
+      <div class="order__usersubmit__submit" @click="submitOrderClick">提交订单</div>
+    </div>
+    <div class="order__mask" v-if="maskShow">
+      <div class="order__mask__bg" @click="maskCloseClick"></div>
+      <div class="order__mask__panel">
+        <div class="order__mask__panel__title">确认要离开收银台？</div>
+        <div class="order__mask__panel__warning">请尽快完成支付，否则将被取消</div>
+        <div class="order__mask__panel__userhandle">
+          <div class="order__mask__panel__userhandle__cancel" @click="cancelOrderClick">取消订单</div>
+          <div class="order__mask__panel__userhandle__confirm" @click="confirmPayClick">确认支付</div>
+        </div>
+      </div>
+      <div class="order__mask__success" v-if="successPanelShow">
+        <div class="order__mask__success__close" @click="cancelOrderClick">&#xe8e7;</div>
+        <div class="order__mask__success__icon">&#xe60a;</div>
+        <div class="order__mask__success__text">支付成功，等待配送</div>
+      </div>
     </div>
   </div>
 </template>
@@ -94,13 +110,47 @@ const showMoreEffect = () => {
   };
   return { showMore, showMoreClick };
 };
+const maskShowEffect = () => {
+  // 蒙层默认关闭
+  const maskShow = ref(false);
+  // 警告提示窗口默认关闭
+  const warningPanelShow = ref(false);
+  // 成功支付窗口默认关闭
+  const successPanelShow = ref(false);
+  // 提交订单，出现蒙层
+  const submitOrderClick = () => {
+    maskShow.value = true;
+    warningPanelShow.value = true;
+    successPanelShow.value = false;
+  };
+  // 点击蒙层，蒙层关闭
+  const maskCloseClick = () => {
+    maskShow.value = false;
+    warningPanelShow.value = false;
+    successPanelShow.value = false;
+  };
+  // 点击取消订单按钮，蒙层关闭
+  const cancelOrderClick = () => {
+    maskShow.value = false;
+    warningPanelShow.value = false;
+    successPanelShow.value = false;
+  };
+  // 点击确认支付，出现成功提示
+  const confirmPayClick = () => {
+    maskShow.value = true;
+    warningPanelShow.value = false;
+    successPanelShow.value = true;
+  };
+  return { maskShow, successPanelShow, submitOrderClick, maskCloseClick, cancelOrderClick, confirmPayClick };
+};
 export default {
   name: "OrderConfirmation",
   setup() {
     const { back } = back2prevPage();
     const { shopName, cartList, totalPrice, totalNumber } = orderEffect();
     const { showMore, showMoreClick } = showMoreEffect();
-    return { shopName, cartList, totalPrice, totalNumber, showMore, back, showMoreClick };
+    const { maskShow, successPanelShow, submitOrderClick, maskCloseClick, cancelOrderClick, confirmPayClick } = maskShowEffect();
+    return { shopName, cartList, totalPrice, totalNumber, showMore, maskShow, successPanelShow, back, showMoreClick, submitOrderClick, maskCloseClick, cancelOrderClick, confirmPayClick };
   },
 };
 </script>
@@ -280,6 +330,96 @@ export default {
       color: #ffffff;
       text-align: center;
       line-height: 49rem;
+    }
+  }
+  &__mask {
+    &__bg {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    &__panel {
+      box-sizing: border-box;
+      padding-top: 24rem;
+      width: 301rem;
+      height: 157rem;
+      background: #ffffff;
+      border-radius: 4rem;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      &__title {
+        font-family: PingFangSC-Medium;
+        font-size: 18rem;
+        color: #333333;
+        text-align: center;
+        margin-bottom: 12rem;
+      }
+      &__warning {
+        font-family: PingFangSC-Regular;
+        font-size: 14rem;
+        text-align: center;
+        color: #666666;
+        margin-bottom: 26rem;
+      }
+      &__userhandle {
+        width: 184rem;
+        height: 32rem;
+        display: flex;
+        justify-content: space-between;
+        margin: 0 auto;
+        &__cancel,
+        &__confirm {
+          width: 80rem;
+          height: 32rem;
+          border: 1rem solid #4fb0f9;
+          border-radius: 16rem;
+          font-family: PingFangSC-Regular;
+          font-size: 14rem;
+          color: #0091ff;
+          line-height: 32rem;
+          text-align: center;
+        }
+        &__confirm {
+          background: #4fb0f9;
+          color: #fff;
+        }
+      }
+    }
+    &__success {
+      width: 301rem;
+      height: 156rem;
+      background: #ffffff;
+      border-radius: 4rem;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      &__close {
+        font-size: 18rem;
+        color: #666666;
+        position: absolute;
+        top: 12rem;
+        right: 12rem;
+      }
+      &__icon {
+        font-size: 56rem;
+        color: #4fb0f9;
+        text-align: center;
+        margin-top: 40rem;
+        font-weight: bold;
+      }
+      &__text {
+        font-family: PingFangSC-Medium;
+        font-size: 18rem;
+        color: #333333;
+        text-align: center;
+        margin-top: 6rem;
+      }
     }
   }
 }
