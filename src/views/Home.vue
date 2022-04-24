@@ -7,7 +7,7 @@
     <div class="gap"></div>
     <Nearby />
   </div>
-  <Docker />
+  <Docker tag="home" />
 </template>
 
 <script>
