@@ -278,7 +278,7 @@ export default {
               font-family: PingFangSC-Regular;
               font-size: 28rem;
               color: #e93b3b;
-              transform: scale(50%, 50%);
+              transform: scale(.5, .5);
               transform-origin: left top;
               &::first-letter {
                 font-size: 20rem;
@@ -289,7 +289,7 @@ export default {
               font-size: 28rem;
               color: #000000;
               text-align: right;
-              transform: scale(50%, 50%);
+              transform: scale(.5, .5);
               transform-origin: right top;
               &::first-letter {
                 font-size: 20rem;
