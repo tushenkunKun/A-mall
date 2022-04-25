@@ -1,21 +1,18 @@
 <template>
   <div class="header">我的订单</div>
   <div class="orderlist">
-    <div class="orderlist__order">
+    <div class="orderlist__order" v-for="item of orderList" :key="item.shopId">
       <div class="orderlist__order__top">
-        <div class="orderlist__order__top__title">沃尔玛</div>
-        <div class="orderlist__order__top__status">已取消</div>
+        <div class="orderlist__order__top__title">{{ item.shopName }}</div>
+        <div class="orderlist__order__top__status">已支付</div>
       </div>
       <div class="orderlist__order__bottom">
         <div class="orderlist__order__bottom__image">
-          <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261527635.png" alt="" />
-          <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261527853.png" alt="" />
-          <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261527922.png" alt="" />
-          <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261530259.png" alt="" />
+          <img v-for="productItem of item.itemList" :key="productItem.id" :src="productItem.imgUrl" alt="" />
         </div>
         <div class="orderlist__order__bottom__count">
-          <div class="orderlist__order__bottom__count__totalprice">¥66.69</div>
-          <div class="orderlist__order__bottom__count__totalnumber">共6件</div>
+          <div class="orderlist__order__bottom__count__totalprice">¥{{orderTotalPrice(item.itemList)}}</div>
+          <div class="orderlist__order__bottom__count__totalnumber">共{{orderTotalNumber(item.itemList)}}件</div>
         </div>
       </div>
     </div>
@@ -24,11 +21,43 @@
 </template>
 <script>
 import Docker from "@/components/Docker.vue";
+import { ref } from "@vue/reactivity";
+import { get } from "@/utils/request";
+/* 订单列表的相关逻辑 */
+const orderListEffect = () => {
+  const orderList = ref([]);
+  // 进入订单列表页面时通过调用接口获取数据
+  const getOrderList = async () => {
+    const result = await get("/api/order-list/1");
+    if (result.data.code === "0000") {
+      orderList.value = result.data.data;
+    } else {
+      orderList.value = [];
+    }
+  };
+  getOrderList();
+  const orderTotalPrice = (productList) => {
+    let totalprice = 0;
+    productList.forEach((element) => {
+      totalprice += element.count * element.promotionPrice;
+    });
+    return totalprice.toFixed(2);
+  };
+  const orderTotalNumber = (productList) => {
+    let totalnumber = 0;
+    productList.forEach((element) => {
+      totalnumber += element.count;
+    });
+    return totalnumber.toFixed(2);
+  };
+  return { orderList, orderTotalPrice, orderTotalNumber };
+};
 export default {
   name: "OrderList",
   components: { Docker },
   setup() {
-    return {};
+    const { orderList, orderTotalPrice, orderTotalNumber } = orderListEffect();
+    return { orderList, orderTotalPrice, orderTotalNumber };
   },
 };
 </script>

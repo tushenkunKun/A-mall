@@ -197,7 +197,7 @@ export default {
     width: 100%;
     height: 52rem;
     padding: 0 18rem;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1rem solid #f1f1f1;
     margin-bottom: 12rem;
     &__select {
       display: flex;

@@ -265,11 +265,11 @@ export default {
         &__info {
           flex-grow: 1;
           &__weight {
-            margin-top: 2px;
+            margin-top: 2rem;
             font-family: PingFangSC-Medium;
-            font-size: 14px;
+            font-size: 14rem;
             color: #333333;
-            margin-bottom: 8px;
+            margin-bottom: 8rem;
           }
           &__price {
             display: flex;
@@ -299,15 +299,15 @@ export default {
         }
       }
       &__more {
-        width: 307px;
-        height: 28px;
+        width: 307rem;
+        height: 28rem;
         background: #f5f5f5;
         margin: 0 auto;
-        font-size: 14px;
+        font-size: 14rem;
         color: #999999;
-        line-height: 28px;
+        line-height: 28rem;
         text-align: center;
-        margin-bottom: 12px;
+        margin-bottom: 12rem;
       }
     }
   }
