@@ -3,6 +3,17 @@
     <div class="container__portrait">
       <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202221429453.png" alt="头像" />
     </div>
+    <el-form label-width="80px">
+      <el-form-item label="名称">
+        <el-input></el-input>
+      </el-form-item>
+      <el-form-item label="活动区域">
+        <el-input></el-input>
+      </el-form-item>
+      <el-form-item label="活动形式">
+        <el-input></el-input>
+      </el-form-item>
+    </el-form>
     <div class="container__userinput">
       <input class="container__userinput__userphone" type="text" placeholder="请输入手机号" v-model="phone" />
       <input class="container__userinput__userpassword" type="password" placeholder="请输入密码" v-model="password" />
@@ -33,13 +44,13 @@ const userLoginEffect = (showToast) => {
   const router = useRouter();
   const handleLogin = async () => {
     try {
-      if (loginData.phone==='') {
-        showToast('请填写手机号')
-        return
+      if (loginData.phone === "") {
+        showToast("请填写手机号");
+        return;
       }
-      if (loginData.password==='') {
-        showToast('请填写密码')
-        return
+      if (loginData.password === "") {
+        showToast("请填写密码");
+        return;
       }
       const result = await post("/api/user/login", { phone: loginData.phone, password: loginData.password });
       if (result.data.code === "0000") {
