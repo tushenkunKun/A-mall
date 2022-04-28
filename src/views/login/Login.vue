@@ -8,20 +8,25 @@
         <el-input placeholder="请输入手机号" type="text" v-model="phone"></el-input>
       </el-form-item>
       <el-form-item label="">
-        <el-input placeholder="请输入密码" type="password" v-model="password"></el-input>
+        <el-input placeholder="请输入密码" v-model="password" show-password></el-input>
       </el-form-item>
     </el-form>
     <!-- <div class="container__userinput">
       <input class="container__userinput__userphone" type="text" placeholder="请输入手机号" v-model="phone" />
       <input class="container__userinput__userpassword" type="password" placeholder="请输入密码" v-model="password" />
     </div> -->
-    <div class="container__userhandle">
+    <el-row class="user-login__wrapper">
+      <el-button class="user-login" type="primary" @click="handleLogin">登 录</el-button>
+    </el-row>
+    <!-- <div class="container__userhandle">
       <button class="container__userhandle__login" @click="handleLogin">登 录</button>
-    </div>
+    </div> -->
     <div class="container__userskipregister">
-      <a href="javascript:;" @click="go2register">立即注册</a>
+      <el-link type="info" @click="go2register">立即注册</el-link>
       <span class="container__userskip__gap">|</span>
-      <a href="javascript:;">忘记密码</a>
+      <el-link type="info">忘记密码</el-link>
+      <!-- <a href="javascript:;" @click="go2register">立即注册</a>
+      <a href="javascript:;">忘记密码</a> -->
     </div>
   </div>
   <Toast v-if="isShowToast" :message="toastMessage" />
@@ -96,7 +101,7 @@ export default {
       height: 66rem;
     }
   }
-  &__userinput {
+  /* &__userinput {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -116,8 +121,24 @@ export default {
       letter-spacing: 0;
       line-height: 24rem;
     }
+  } */
+  .user-login__wrapper {
+    justify-content: center;
+    margin-bottom: 20rem;
+    .user-login {
+      width: 295rem;
+      height: 48rem;
+      background: #0091ff;
+      box-shadow: 0 4rem 8rem 0 rgba(0, 145, 255, 0.32);
+      border-radius: 4rem;
+      font-family: PingFangSC-Regular;
+      font-size: 18rem;
+      color: #fff;
+      letter-spacing: 0;
+      line-height: 24rem;
+    }
   }
-  &__userhandle {
+  /* &__userhandle {
     text-align: center;
     margin-bottom: 16rem;
     &__login {
@@ -132,7 +153,7 @@ export default {
       letter-spacing: 0;
       line-height: 24rem;
     }
-  }
+  } */
   &__userskipregister {
     width: 139rem;
     height: 20rem;
@@ -151,7 +172,25 @@ export default {
     }
   }
 }
-</style>
-<style>
-@import "./login.scss";
+/* 有scoped的情况下，更改element的样式无效，需使用深度选择器材 */
+/* >>>是深度选择器，/deep/和::v-deep是它的别名，scss模式下/deep/不识别，可用::v-deep */
+::v-deep .el-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10rem;
+}
+::v-deep .el-input__wrapper{
+  width: 295rem;
+  height: 48rem;
+  background: #f9f9f9;
+  border: 1rem solid rgba(0, 0, 0, 0.1);
+  border-radius: 6rem;
+  padding-left: 16rem;
+  font-family: PingFangSC-Regular;
+  font-size: 16rem;
+  color: rgba(0, 0, 0, 0.5);
+  letter-spacing: 0;
+  line-height: 24rem;
+}
 </style>
