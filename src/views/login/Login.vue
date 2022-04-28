@@ -3,21 +3,18 @@
     <div class="container__portrait">
       <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202221429453.png" alt="头像" />
     </div>
-    <el-form label-width="80px">
-      <el-form-item label="名称">
-        <el-input></el-input>
+    <el-form>
+      <el-form-item label="">
+        <el-input placeholder="请输入手机号" type="text" v-model="phone"></el-input>
       </el-form-item>
-      <el-form-item label="活动区域">
-        <el-input></el-input>
-      </el-form-item>
-      <el-form-item label="活动形式">
-        <el-input></el-input>
+      <el-form-item label="">
+        <el-input placeholder="请输入密码" type="password" v-model="password"></el-input>
       </el-form-item>
     </el-form>
-    <div class="container__userinput">
+    <!-- <div class="container__userinput">
       <input class="container__userinput__userphone" type="text" placeholder="请输入手机号" v-model="phone" />
       <input class="container__userinput__userpassword" type="password" placeholder="请输入密码" v-model="password" />
-    </div>
+    </div> -->
     <div class="container__userhandle">
       <button class="container__userhandle__login" @click="handleLogin">登 录</button>
     </div>
@@ -154,4 +151,7 @@ export default {
     }
   }
 }
+</style>
+<style>
+@import "./login.scss";
 </style>

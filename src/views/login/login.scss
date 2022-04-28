@@ -1,0 +1,23 @@
+.el-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10rem;
+}
+.el-form-item {
+  margin-bottom: 0rem;
+}
+.el-input__inner {
+  width: 295rem;
+  height: 48rem;
+  margin-bottom: 16rem;
+  background: #f9f9f9;
+  border: 1rem solid rgba(0, 0, 0, 0.1);
+  border-radius: 6rem;
+  padding-left: 16rem;
+  font-family: PingFangSC-Regular;
+  font-size: 16rem;
+  color: rgba(0, 0, 0, 0.5);
+  letter-spacing: 0;
+  line-height: 24rem;
+}
