@@ -37,4 +37,16 @@ export default {
     height: 86rem;
   }
 }
+::v-deep .swiper-pagination-bullet {
+  width: 25rem;
+  height: 5rem;
+  border-radius: 10rem;
+  background-color: #fff;
+}
+::v-deep .swiper-button-next,::v-deep .swiper-button-prev {
+  color: #fff;
+}
+::v-deep .swiper-button-next::after,::v-deep .swiper-button-prev::after {
+  font-size: 20rem;
+}
 </style>
