@@ -1,6 +1,6 @@
 <template>
   <div class="banner">
-    <swiper :modules="modules" :slides-per-view="1" :space-between="10" navigation :pagination="{ clickable: true }">
+    <swiper :modules="modules" :slides-per-view="1" :space-between="10" navigation :pagination="{ clickable: true }" :autoplay="{ delay: 3000 }">
       <swiper-slide><img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202191609589.png" alt="双11狂欢节" /></swiper-slide>
       <swiper-slide><img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202191609589.png" alt="双11狂欢节" /></swiper-slide>
       <swiper-slide><img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202191609589.png" alt="双11狂欢节" /></swiper-slide>
@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Navigation, Pagination, Autoplay, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -24,7 +24,7 @@ export default {
     SwiperSlide,
   },
   setup() {
-    return { modules: [Navigation, Pagination, A11y] };
+    return { modules: [Navigation, Pagination, Autoplay, A11y] };
   },
 };
 </script>
