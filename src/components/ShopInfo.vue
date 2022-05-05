@@ -46,6 +46,9 @@ export default {
     &__tags {
       font-size: 13rem;
       margin-bottom: 8rem;
+      &__tag {
+        margin: 0 15rem 0 0;
+      }
     }
     &__notice {
       font-size: 13rem;
