@@ -92,6 +92,7 @@ const orderEffect = () => {
   const shopName = cartData[shopId].shopName;
   // 获取购物车商品列表
   const cartList = cartData[shopId].itemList;
+  console.log(cartList);
   // 计算总价和总量
   let totalPrice = 0;
   let totalNumber = 0;
