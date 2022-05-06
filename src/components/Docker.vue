@@ -21,7 +21,7 @@ export default {
   setup() {
     const dockerItems = [
       { icon: "&#xe608;", text: "首页", tag: "home", path:"/" },
-      { icon: "&#xe60d;", text: "购物车", tag: "cart", path:"/" },
+      { icon: "&#xe60d;", text: "购物车", tag: "usercart", path:"/usercart" },
       { icon: "&#xe601;", text: "订单", tag: "order", path:"/order-list" },
       { icon: "&#xe646;", text: "我的", tag: "profile", path:"/profile" },
     ];

@@ -36,6 +36,11 @@ const routes = [
     },
   },
   {
+    path:'/usercart',
+    name:'UserCart',
+    component:()=>import("../views/usercart/UserCart.vue")
+  },
+  {
     path:'/profile',
     name:'Profile',
     component:()=>import("../views/profile/Profile.vue")
