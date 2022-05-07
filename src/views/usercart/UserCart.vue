@@ -1,7 +1,9 @@
 <template>
   <div class="usercart">
     <div class="usercart__header">
-      我的全部购物车(<span class="usercart__num">1</span>)
+      我的全部购物车(
+      <span class="usercart__num">1</span>
+      )
     </div>
     <div class="usercart__item">
       <div class="order__detail">
@@ -136,11 +138,18 @@ export default {
   left: 0;
   bottom: 49rem;
   background-color: #f8f8f8;
-  &__header{
+  &__header {
+    width: 375rem;
     height: 44rem;
     background-color: #fff;
+    font-family: PingFangSC-Regular;
+    font-size: 16rem;
+    color: #333333;
+    text-align: center;
+    line-height: 44rem;
   }
   &__item {
+    margin: 16rem 0;
     & .order__detail {
       width: 339rem;
       border-radius: 4rem;
